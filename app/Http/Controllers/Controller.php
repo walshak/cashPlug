@@ -20,51 +20,65 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function getBalance($id = null){
-        if(is_null($id)){
+    public function getBalance($id = null)
+    {
+        if (is_null($id)) {
             $id = Auth::id();
-        }else{
+        } else {
             $id = $id;
         }
 
-        $balance = Transaction::where('userId',$id)
-                    ->where('type','CAPITAL')
-                    ->orWhere('type','REFERRAL')
-                    ->orWhere('type','WITHDRAWAL')
-                    ->pluck('amount')
-                    ->sum();
+        $balance = Transaction::where('userId', $id)
+            ->where(function ($query) {
+                $query->where('type', 'CAPITAL')
+                    ->orWhere('type', 'REFERRAL')
+                    ->orWhere('type', 'REFERRAL-AUTO')
+                    ->orWhere('type', 'WITHDRAWAL');
+            })
+            ->pluck('amount')
+            ->sum();
         return $balance;
     }
 
-    public function getGrossBalance($id = null){
-        if(is_null($id)){
+    public function getGrossBalance($id = null)
+    {
+        if (is_null($id)) {
             $id = Auth::id();
-        }else{
+        } else {
             $id = $id;
         }
 
-        $balance = Transaction::where('userId',$id)
-                    ->where('type','CAPITAL')
-                    ->orWhere('type','REFERRAL')
-                    ->pluck('amount')
-                    ->sum();
+        $balance = Transaction::where('userId', $id)
+            ->where(function ($query) {
+                $query->where('type', 'CAPITAL')
+                    ->orWhere('type', 'REFERRAL')
+                    ->orWhere('type', 'REFERRAL-AUTO');
+            })
+            ->pluck('amount')
+            ->sum();
         return $balance;
     }
 
-    public function getBalanceForCurCycle($id = null){
-        if(is_null($id)){
+    public function getBalanceForCurCycle($id = null)
+    {
+        if (is_null($id)) {
             $id = Auth::id();
-        }else{
+        } else {
             $id = $id;
         }
+
         $cur_plan_activated_on = User::find($id)->plan_activated_on;
-        $balance_cur_cycle = Transaction::where('userId',$id)
-                    ->where('created_at','>',$cur_plan_activated_on)
-                    ->where('type','CAPITAL')
-                    ->orWhere('type','REFERRAL')
-                    ->pluck('amount')
-                    ->sum();
-        //dd($balance_cur_cycle);
+
+        $balance_cur_cycle = Transaction::where('userId', $id)
+            ->where('created_at', '>', $cur_plan_activated_on)
+            ->where(function ($query) {
+                $query->where('type', 'CAPITAL')
+                    ->orWhere('type', 'REFERRAL')
+                    ->orWhere('type', 'REFERRAL-AUTO')
+                    ->orWhere('type', 'WITHDRAWAL');
+            })
+            ->pluck('amount')
+            ->sum();
         return $balance_cur_cycle;
     }
 
@@ -91,50 +105,53 @@ class Controller extends BaseController
         }
     }
 
-    public function getRefs($id = null){
-        if(is_null($id)){
+    public function getRefs($id = null)
+    {
+        if (is_null($id)) {
             $id = Auth::id();
-        }else{
+        } else {
             $id = $id;
         }
         $hisRefId = User::find($id)->ref_id;
         //dd($hisRefId);
 
-        $refs = User::where('refferd_by',$hisRefId)
-                    ->where('cycle','!=',0)
-                    ->get();
+        $refs = User::where('refferd_by', $hisRefId)
+            ->where('cycle', '!=', 0)
+            ->get();
         return $refs;
     }
 
-    public function getRefForCurCycle($id = null){
-        if(is_null($id)){
+    public function getRefForCurCycle($id = null)
+    {
+        if (is_null($id)) {
             $id = Auth::id();
-        }else{
+        } else {
             $id = $id;
         }
-        $user = User::find($id);//get the user whose referrals we wish to obtain
+        $user = User::find($id); //get the user whose referrals we wish to obtain
 
         //query the database for all the people he referred(who are currently on their first cycle)
         //since when he activated his most recent plan
-        $refs_for_cur_cycle = User::where('refferd_by',$user->ref_id)
-                                    ->where('plan_activated_on','>',$user->plan_activated_on)
-                                    ->where('cycle','=',1)
-                                    ->get();
+        $refs_for_cur_cycle = User::where('refferd_by', $user->ref_id)
+            ->where('plan_activated_on', '>', $user->plan_activated_on)
+            ->where('cycle', '=', 1)
+            ->get();
         return $refs_for_cur_cycle;
         //dd($refs_for_cur_cycle);
     }
 
-    public function subscribe($plan_id){
-        if(!$this->hasActivePlan()){
+    public function subscribe($plan_id)
+    {
+        if (!$this->hasActivePlan()) {
             $user = User::find(Auth::id());
             $plan = Plan::find($plan_id);
             $cur_date = date('Y-m-d H:i:s');
-            $ref_by = User::where('ref_id',$user->refferd_by)->get();
-            //dd($ref_by);
+            $ref_by = User::where('ref_id', $user->refferd_by)->get();
+            // dd($ref_by);
 
             //if he has subscribed before(cycle != 0),
             //it means this subscribtion is a renewal
-            if($user->cycle != 0){
+            if ($user->cycle != 0) {
                 //do subscribtion renewal
                 $user->update([
                     'cur_plan' => $plan->id,
@@ -142,15 +159,17 @@ class Controller extends BaseController
                     'plan_activated_on' => $cur_date,
                     'cycle' => $user->cycle + 1
                 ]);
+
                 //credit the person making the subscription renewal
                 $credit_user = new Transaction;
-                $credit_user->userId = $user->id;
+                $credit_user->userId = Auth::id();
                 $credit_user->amount = $plan->price * env('USER_PERCENTAGE');
                 $credit_user->type = 'CAPITAL';
                 $credit_user->save();
+
                 //credit admin
                 $credit_admin = new Transaction;
-                $credit_admin->userId = $ref_by[0]->id;
+                $credit_admin->userId = Auth::id();
                 $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
                 $credit_admin->type = 'ADMIN';
                 $credit_admin->save();
@@ -158,120 +177,198 @@ class Controller extends BaseController
                 //credit VAT
 
                 $credit_vat = new Transaction;
-                $credit_vat->userId =$ref_by[0]->id;
+                $credit_vat->userId = Auth::id();
                 $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
                 $credit_vat->type = 'VAT';
                 $credit_vat->save();
-            }else{
-                //do new subscribtion for user who has never subscribed before
-                $user = $user->update([
-                    'cur_plan' => $plan->id,
-                    'plan_activated' => true,
-                    'plan_activated_on' => $cur_date,
-                    'cycle' => $user->cycle + 1
-                ]);
-                //credit the person who refferd him
-                $credit = new Transaction;
-                $credit->userId = $ref_by[0]->id;
-                $credit->amount = $plan->price * env('REF_PERCENTAGE');
-                $credit->type = 'REFERRAL';
-                $credit->save();
-                //credit admin
-                $credit_admin = new Transaction;
-                $credit_admin->userId = $ref_by[0]->id;
-                $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
-                $credit_admin->type = 'ADMIN';
-                $credit_admin->save();
+            } else {
+                //do new subscription for user who has never subscribed before
+                //call the getNextRefBeneficiary() method and set the reffered_by attribute of the user
+                //to the value returned form the getNextRefBeneficiary() method
+                $nextBeneciciaryOfAutoReferral = $this->getNextRefBeneficiary($plan->id) ?? env('SUPER_ADMIN_USERNAME');
+                if ($user->refferd_by == null) {
+                    //dd($nextBeneciciaryOfAutoReferral->ref_id);
+                    $user = $user->update([
+                        'cur_plan' => $plan->id,
+                        'plan_activated' => true,
+                        'plan_activated_on' => $cur_date,
+                        'cycle' => $user->cycle + 1,
+                        'refferd_by' => $nextBeneciciaryOfAutoReferral->ref_id ?? env('SUPER_ADMIN_USERNAME')
+                    ]);
 
-                //credit VAT
+                    //credit the person who refferd him
+                    $credit = new Transaction;
+                    $credit->userId = $nextBeneciciaryOfAutoReferral->id ?? env('SUPER_ADMIN_ID');;
+                    $credit->amount = $plan->price * env('REF_PERCENTAGE');
+                    $credit->type = 'REFERRAL-AUTO';
+                    $credit->save();
 
-                $credit_vat = new Transaction;
-                $credit_vat->userId =$ref_by[0]->id;
-                $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
-                $credit_vat->type = 'VAT';
-                $credit_vat->save();
+                    //credit admin
+                    $credit_admin = new Transaction;
+                    $credit_admin->userId = Auth::id();
+                    $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
+                    $credit_admin->type = 'ADMIN';
+                    $credit_admin->save();
+
+                    //credit VAT
+                    $credit_vat = new Transaction;
+                    $credit_vat->userId = Auth::id();
+                    $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
+                    $credit_vat->type = 'VAT';
+                    $credit_vat->save();
+                } else {
+                    $user = $user->update([
+                        'cur_plan' => $plan->id,
+                        'plan_activated' => true,
+                        'plan_activated_on' => $cur_date,
+                        'cycle' => $user->cycle + 1,
+                    ]);
+                    //credit the person who refferd him
+                    $credit = new Transaction;
+                    $credit->userId = $ref_by[0]->id ?? env('SUPER_ADMIN_USERNAME');
+                    $credit->amount = $plan->price * env('REF_PERCENTAGE');
+                    $credit->type = 'REFERRAL';
+                    $credit->save();
+
+                    //credit admin
+                    $credit_admin = new Transaction;
+                    $credit_admin->userId = Auth::id() ?? env('SUPER_ADMIN_USERNAME');
+                    $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
+                    $credit_admin->type = 'ADMIN';
+                    $credit_admin->save();
+
+                    //credit VAT
+                    $credit_vat = new Transaction;
+                    $credit_vat->userId = Auth::id() ?? env('SUPER_ADMIN_USERNAME');
+                    $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
+                    $credit_vat->type = 'VAT';
+                    $credit_vat->save();
+                }
             }
-            return back()->with('msg',"Subscription added, Congratulations");
-        }else{
-            return back()->with('err','You already have an active plan');
+            return back()->with('msg', "Subscription added, Congratulations");
+        } else {
+            return back()->with('err', 'You already have an active plan');
         }
     }
 
-    public function hasActivePlan(){
+    public function getNextRefBeneficiary($plan_id)
+    {
+        //get all users with active plans and the plan is same as the plan that the user is about to,
+        //subscribe to
+        $all_user = User::where('plan_activated', true)
+            ->where('cur_plan', $plan_id)
+            ->where('active', true)
+            ->get();
+
+        //initailize some variables
+        $users_in_need_of_downlines = [];
+        $plan_activation_dates = [];
+
+        //loop through users and find those that have less than env(AUTO_DOWNLINES) downlines,
+        //and add them to the $users_in_need_of_downlines array
+        foreach ($all_user as $user) {
+
+            if (count($this->getRefForCurCycle($user->id)) < env('AUTO_DOWNLINES')) {
+                array_push($users_in_need_of_downlines, $user);
+            }
+        }
+
+        //loop through the $users_in_need_of_downlines arrray,
+        //and find the person who activated his plan first among them
+        foreach ($users_in_need_of_downlines as $user) {
+
+            //add the plan_actvated_on dates of each of the $users_in_need_of_downlines
+            //to the $plan_activation_dates array,
+            //so that it can be sorted, and we can find the person who registered first among them
+            array_push($plan_activation_dates, $user->plan_activated_on);
+            sort($plan_activation_dates);
+
+            //find the first element of the sorted $plan_activation_dates array,
+            //and find the user who has that plan_activated_on date, and return that user
+            if (in_array($plan_activation_dates[0], (array)$user)) {
+                return $user;
+            }
+        }
+    }
+
+    public function hasActivePlan()
+    {
         $chkPlan = User::find(Auth::id());
         $cur_date = date('U');
         $planActivated = $chkPlan->plan_activated;
         $planActivatedOn = $chkPlan->plan_activated_on;
-        if($planActivated == true){
+        if ($planActivated == true) {
             $planValidity = $chkPlan->plan->validity;
             $referalsPerCycle = $chkPlan->plan->refs;
-            if(($cur_date - strtotime($planActivatedOn))/86400 <= $planValidity){
+            if (($cur_date - strtotime($planActivatedOn)) / 86400 <= $planValidity) {
                 $referals = User::where([
-                    'refferd_by'=> $chkPlan->ref_id,
+                    'refferd_by' => $chkPlan->ref_id,
                     'plan_activated' => true
                 ])->get();
                 $referals = count($referals);
                 $cycle = $chkPlan->cycle;
-                if($referals < ($referalsPerCycle*$cycle)){
+                if ($referals < ($referalsPerCycle * $cycle)) {
                     return true;
-                }elseif($referals == ($referalsPerCycle*$cycle)){
+                } elseif ($referals == ($referalsPerCycle * $cycle)) {
                     $chkPlan->update([
                         'plan_activated' => false
                     ]);
                     return false;
-                }else{
+                } else {
                     return false;
                 }
-            }else{
+            } else {
                 return false;
             }
-        }else{
+        } else {
             return false;
         }
     }
 
-    public function suspend_user_page($user_id=null){
-        if(is_null($user_id)){
+    public function suspend_user_page($user_id = null)
+    {
+        if (is_null($user_id)) {
             //show the page, the data would be fetched via ajax in the suspend_user function
             return view('dashboards.admins.suspend-user');
-        }else{
+        } else {
             $user = User::find($user_id);
 
-            if($user->active ==true){
+            if ($user->active == true) {
                 //suspend the user
-                if($user->update(['active'=> false])){
-                    return back()->with('msg','User '.$user->name.' suspended');
-                }else{
-                    return back()->with('err','Request failed');
+                if ($user->update(['active' => false])) {
+                    return back()->with('msg', 'User ' . $user->name . ' suspended');
+                } else {
+                    return back()->with('err', 'Request failed');
                 }
-            }else{
+            } else {
                 //unsuspend the user
-                if($user->update(['active'=> true])){
-                    return back()->with('msg','User '.$user->name.' unsuspended');
-                }else{
-                    return back()->with('err','Request failed');
+                if ($user->update(['active' => true])) {
+                    return back()->with('msg', 'User ' . $user->name . ' unsuspended');
+                } else {
+                    return back()->with('err', 'Request failed');
                 }
             }
         }
     }
 
-    public function suspend_user(Request $request, $user_id=null){
+    public function suspend_user(Request $request, $user_id = null)
+    {
         if ($request->ajax()) {
             $data = User::where('role', '>', 1)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     //dd($row);
-                    $link = route('admin.suspend-user-page',$row->id);
+                    $link = route('admin.suspend-user-page', $row->id);
 
-                    if($row->active == 1){
-                        $confirm_msg = 'Are you sure you want to suspend user:'.$row->name;
-                        $actionBtn = '<a href="'.$link.'"class="btn btn-danger"
-                            onclick="return confirm(\''.$confirm_msg.'\')">Suspend</a>';
-                    }else{
-                        $confirm_msg = 'Are you sure you want to restore user:'.$row->name;
-                        $actionBtn = '<a href="'.$link.'"class="btn btn-primary"
-                        onclick="return confirm(\''.$confirm_msg.'\')">Unsuspend</a>';
+                    if ($row->active == 1) {
+                        $confirm_msg = 'Are you sure you want to suspend user:' . $row->name;
+                        $actionBtn = '<a href="' . $link . '"class="btn btn-danger"
+                            onclick="return confirm(\'' . $confirm_msg . '\')">Suspend</a>';
+                    } else {
+                        $confirm_msg = 'Are you sure you want to restore user:' . $row->name;
+                        $actionBtn = '<a href="' . $link . '"class="btn btn-primary"
+                        onclick="return confirm(\'' . $confirm_msg . '\')">Unsuspend</a>';
                     }
                     return $actionBtn;
                 })
@@ -280,46 +377,47 @@ class Controller extends BaseController
         }
     }
 
-    public function approve_payment_page($request_id=null){
+    public function approve_payment_page($request_id = null)
+    {
 
-        if(is_null($request_id)){
+        if (is_null($request_id)) {
             return view('dashboards.admins.approve-payment');
-        }else{
+        } else {
             $request = WithdrawalRequest::find($request_id);
             $user = $request->user;
             //process payment
-            return back()->with('msg','Withrawal request of user: '.$user->name.' approved');
+            return back()->with('msg', 'Withrawal request of user: ' . $user->name . ' approved');
         }
-
     }
-    public function approve_payment(Request $request, $request_id=null){
+    public function approve_payment(Request $request, $request_id = null)
+    {
         //get withdrawal requests
         if ($request->ajax()) {
-            $data = WithdrawalRequest::where(['approved'=>0])->get();
+            $data = WithdrawalRequest::where(['approved' => 0])->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
                     //dd($row);
-                    $link = route('admin.approve-payment-page',$row->id);
+                    $link = route('admin.approve-payment-page', $row->id);
                     $confirm_msg = 'Are you sure you want to approve this request';
-                    $actionBtn = '<a href="'.$link.'"class="btn btn-primary"
-                    onclick="return confirm(\''.$confirm_msg.'\')">Approve</a>';
+                    $actionBtn = '<a href="' . $link . '"class="btn btn-primary"
+                    onclick="return confirm(\'' . $confirm_msg . '\')">Approve</a>';
                     return $actionBtn;
                 })
-                ->addColumn('name', function($row){
+                ->addColumn('name', function ($row) {
                     return $row->user->name;
                 })
                 ->rawColumns(['action'])
                 ->make(true);
         }
-
     }
 
-    public function hasRequestedWithdrawal(){
+    public function hasRequestedWithdrawal()
+    {
         $user = Auth::user();
-        if(count($user->withdrawalRequest) > 0 ){
+        if (count($user->withdrawalRequest) > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

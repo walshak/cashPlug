@@ -7,6 +7,7 @@ use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -31,6 +32,7 @@ class RegisterController extends Controller
      */
     protected $redirectTo = RouteServiceProvider::HOME;
 
+
     /**
      * Create a new controller instance.
      *
@@ -53,15 +55,19 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'reffered_by'=> ['nullable','min:3']
+            'refferd_by'=> ['nullable','min:3','exists:users,ref_id']
         ]);
     }
 
-    //function to generate a unique ref_id
+    /**
+     * Function to generate a unique ref_id
+     * @param string $name the name of the person
+     * @return string $ref_id
+     */
     public function create_ref_id($name)
     {
         $ref_id = preg_replace("/\s+/", "", $name);//remove tabs and spaces from name
-        $ref_id = substr($ref_id,0,4).rand(1000,10000);
+        $ref_id = substr($ref_id,0,4).rand(1000,1000000);
         return $ref_id;
     }
 
@@ -77,7 +83,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'reffered_by'=> $data['reffered_by'],
+            'refferd_by'=> $data['refferd_by'],
             'ref_id' => $this->create_ref_id($data['name'])
         ]);
     }

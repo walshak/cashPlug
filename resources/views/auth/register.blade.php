@@ -63,16 +63,16 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Reffered By') }}</label>
+                            <label for="refferd_by" class="col-md-4 col-form-label text-md-right">{{ __('Reffered By') }}</label>
 
                             <div class="col-md-6">
                                 @if (isset($_GET['ref_id']))
-                                    <input id="name" type="text" class="form-control @error('reffered_by') is-invalid @enderror" name="reffered_by" value="{{ $_GET['ref_id'] }}" disabled>
+                                    <input id="refferd_by" type="text" class="form-control @error('refferd_by') is-invalid @enderror" name="refferd_by" value="{{ $_GET['ref_id'] }}">
                                 @else
-                                    <input id="name" type="text" class="form-control @error('reffered_by') is-invalid @enderror" name="reffered_by" value="{{ old('reffered_by') }}">
+                                    <input id="refferd_by" type="text" class="form-control @error('refferd_by') is-invalid @enderror" name="refferd_by" value="{{ old('refferd_by') }}">
                                 @endif
 
-                                @error('reffered_by')
+                                @error('refferd_by')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -85,6 +85,9 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Register') }}
                                 </button>
+                                <a href="{{ route('login')}}" class="btn btn-link">
+                                    Already have an account? Login
+                                </a>
                             </div>
                         </div>
                     </form>

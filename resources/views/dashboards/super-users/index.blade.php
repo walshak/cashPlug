@@ -76,6 +76,10 @@
             <div class="card-body">
                 <h4>Member since</h4>
                 <span>{{date('d M Y',strtotime($user->created_at))}}</span><br><br>
+                <div class="form-group">
+                    <label for="">Your referral link</label>
+                    <input type="text" value="{{route('register',['ref_id'=>Auth::user()->ref_id])}}" class="form-control form-control-lg disabled">
+                </div>
                 <a href="{{route('super-admin.settings')}}" class="btn btn-primary">See detailed info</a>
             </div>
         </div>

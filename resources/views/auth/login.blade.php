@@ -6,6 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
+                
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
@@ -63,6 +64,9 @@
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif
+                                <a href="{{ route('register')}}" class="btn btn-link">
+                                    Dont't have an account? Sign up
+                                </a>
                             </div>
                         </div>
                     </form>

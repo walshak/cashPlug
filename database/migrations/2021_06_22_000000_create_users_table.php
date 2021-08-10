@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->integer('role')->default(2);
             $table->boolean('active')->default(1);
-            $table->string('refferd_by')->default(env('SUPER_ADMIN_USERNAME'));
+            $table->string('refferd_by')->nullable();
             $table->string('ref_id')->nullable();
             $table->unsignedBigInteger('cur_plan')->nullable();
             $table->boolean('plan_activated')->default(false);

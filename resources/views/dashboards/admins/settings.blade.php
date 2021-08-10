@@ -86,6 +86,12 @@
                                 <a href="#" class="btn btn-secondary disabled">Withdraw(not availiable yet)</a>
                             @endif
                         </div>
+                        <div class="card-footer">
+                            <div class="form-group">
+                                <label for="">Your referral link</label>
+                                <input type="text" value="{{route('register',['ref_id'=>Auth::user()->ref_id])}}" class="form-control form-control-lg disabled">
+                            </div>
+                        </div>
                     </div>
                 </div>
             @else

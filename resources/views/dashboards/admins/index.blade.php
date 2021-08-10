@@ -74,8 +74,13 @@
     <div class="row ">
         <div class="card primary">
             <div class="card-body">
-                <h4>Last withdrawal</h4>
-                <span>22 july, 2020</span>
+                <h4>Member since</h4>
+                <span>{{date('d M Y',strtotime($user->created_at))}}</span><br><br>
+                <div class="form-group">
+                    <label for="">Your referral link</label>
+                    <input type="text" value="{{route('register',['ref_id'=>Auth::user()->ref_id])}}" class="form-control form-control-lg disabled">
+                </div>
+                <a href="{{route('admin.settings')}}" class="btn btn-primary">See detailed info</a>
             </div>
         </div>
     </div>
