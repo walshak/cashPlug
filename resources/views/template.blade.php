@@ -33,7 +33,7 @@
                 <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                     <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#news">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How it works</a></li>
                     <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                     @if (Auth::check())
@@ -80,29 +80,44 @@
                 <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
+                        <i class="fas fa-robot fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="my-3">E-Commerce</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam
-                        architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <h4 class="my-3">Automated</h4>
+                    <p class="text-muted">CashPlug Africa is an automated system that works for you. It is a proven
+                        support chain system that will totally eradicate poverty using the power of Team work.
+                        It is the Africans’ fastest and reliable platform to help you meet your financial goals...The
+                        moment you sign up and make a deposit you will be
+                        assigned automatically matched down-lines that work on your behalf and you get paid the moment
+                        your downlines meet the minimum requirements.
+                    </p>
                 </div>
                 <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                        <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
+                        <i class="fas fa-users fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="my-3">Responsive Design</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam
-                        architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <h4 class="my-3">Team work</h4>
+                    <p class="text-muted">Team Work boosts productivity – when workload is shared equally by members of
+                        a
+                        team and the tasks are allocated according to the strengths and skills of each team member,
+                        tasks are completed faster and more efficiently which results in a noticeable increase in
+                        productivity. With CashPlug, you become a member of a team, and that team works for you. With
+                        our automated matching system, people around the globe support each other without even realizing
+                        it by simply signing up and making a contribution on CashPlug.</p>
                 </div>
                 <div class="col-md-4">
                     <span class="fa-stack fa-4x">
                         <i class="fas fa-circle fa-stack-2x text-primary"></i>
                         <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
                     </span>
-                    <h4 class="my-3">Web Security</h4>
-                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam
-                        architecto quo inventore harum ex magni, dicta impedit.</p>
+                    <h4 class="my-3">Secure</h4>
+                    <p class="text-muted">CashPlug automatically matches individuals and they contribute to one another
+                        on a fair ‘first come first serve basis’ your initial contribution is automatically matched to
+                        an existing member,and from then on, new members will be assigned to you too.With a guaranteed
+                        plan and secure technical
+                        setup(servers) your info is safe. All sensitive information is stored on a secure server and is
+                        not shared with anyone-not
+                        even your up-line or down-lines..</p>
                 </div>
             </div>
         </div>
@@ -127,9 +142,9 @@
                                     <i class="fas fa-check"></i> {{ $plan->price }} NGN <br>
                                     <i class="fas fa-check"></i> {{ $plan->validity }} Days <br>
                                     <i class="fas fa-check"></i> Make at least
-                                    {{ $plan->price * $plan->refs * env('USER_PERCENTAGE') }}k <br>
+                                    {{ $plan->price * $plan->refs * env('USER_PERCENTAGE') }} NGN <br>
                                     <i class="fas fa-check"></i> Min withdarwal
-                                    {{ $plan->price * 2 * env('USER_PERCENTAGE') }}k <br>
+                                    {{ $plan->price * 4 * env('USER_PERCENTAGE') }} NGN <br>
                                 </p>
                                 <a href="{{ route('users.subscribe', $plan->id) }}" class="btn btn-warning">
                                     Subscribe
@@ -142,75 +157,97 @@
         </div>
     </section>
     <!-- About-->
-    <section class="page-section" id="news">
+    <section class="page-section" id="how-it-works">
         <div class="container">
             <div class="text-center">
-                <h2 class="section-heading text-uppercase">News</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                <h2 class="section-heading text-uppercase">How it works</h2>
+                <h3 class="section-subheading text-muted">How to get on-board.</h3>
             </div>
             <ul class="timeline">
                 <li>
-                    <div class="timeline-image"><img class="rounded-circle img-fluid"
-                            src="{{ asset('landing-page/assets/img/about/1.jpg') }}" alt="..." /></div>
+                    <div class="timeline-image d-flex align-items-center justify-content-center">
+                        <h1 class="" style="font-size: 5rem">1</h1>
+                    </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4>2009-2011</h4>
-                            <h4 class="subheading">Our Humble Beginnings</h4>
+                            <h4 class="subheading">Sign Up</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut
-                                voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero
-                                unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <p class="text-muted">Sign Up by filling out the <a href="{{ route('register') }}">
+                                    registration form </a>, <a href="{{ route('login') }}">login</a> using your
+                                email and password, add your beneficiary bank account.</p>
                         </div>
                     </div>
                 </li>
                 <li class="timeline-inverted">
-                    <div class="timeline-image"><img class="rounded-circle img-fluid"
-                            src="{{ asset('landing-page/assets/img/about/2.jpg') }}" alt="..." /></div>
+                    <div class="timeline-image d-flex align-items-center justify-content-center">
+                        <h1 class="" style="font-size: 5rem">2</h1>
+                    </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4>March 2011</h4>
-                            <h4 class="subheading">An Agency is Born</h4>
+                            <h4 class="subheading">Activate a plan</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut
-                                voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero
-                                unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <p class="text-muted"> Activate ANY plan by selecting it in the settings tab of your
+                                dashboard (The screen you get after logging in) and making a
+                                payment (via our payment gateways) to activate the selected plan of choice. After a
+                                successful payment(which serves as your contribution to whomever the system places you
+                                under-this would be the person who refers you, if you signed up with a referral link).
+                                Your account
+                                automatically opens and the system automatically starts placing new members under you
+                            </p>
                         </div>
                     </div>
                 </li>
                 <li>
-                    <div class="timeline-image"><img class="rounded-circle img-fluid"
-                            src="{{ asset('landing-page/assets/img/about/3.jpg') }}" alt="..." /></div>
+                    <div class="timeline-image d-flex align-items-center justify-content-center">
+                        <h1 class="" style="font-size: 5rem">3</h1>
+                    </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4>December 2015</h4>
-                            <h4 class="subheading">Transition to Full Service</h4>
+                            <h4 class="subheading">Withdraw</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut
-                                voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero
-                                unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <p class="text-muted">After the system automatically places the maximum nunber of
+                                automatic downlines(depends on your selected plan) under you, you will be able to
+                                withdraw your funds( subject to admin approval) directly to your bank account</p>
                         </div>
                     </div>
                 </li>
                 <li class="timeline-inverted">
-                    <div class="timeline-image"><img class="rounded-circle img-fluid"
-                            src="{{ asset('landing-page/assets/img/about/4.jpg') }}" alt="..." /></div>
+                    <div class="timeline-image d-flex align-items-center justify-content-center">
+                        <h1 class="" style="font-size: 5rem">4</h1>
+                    </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
                             <h4>July 2020</h4>
-                            <h4 class="subheading">Phase Two Expansion</h4>
+                            <h4 class="subheading">Renew</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut
-                                voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero
-                                unde, sed, incidunt et ea quo dolore laudantium consectetur!</p>
+                            <p class="text-muted">After Your withdrawal, you will be required to refer 1 person, upon
+                                confirmation, the system
+                                will automatically allow you to renew or upgrade your plan.</p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-image d-flex align-items-center justify-content-center">
+                        <h1 class="" style="font-size: 5rem">5</h1>
+                    </div>
+                    <div class="timeline-panel">
+                        <div class="timeline-heading">
+                            <h4 class="subheading">Referral (optional)</h4>
+                        </div>
+                        <div class="timeline-body">
+                            <p class="text-muted">CashPlug has an automatic system that helps members by automatically
+                                matching contributors to downlines, but members can cut the wait by sourcing for and
+                                referring
+                                donnlines for themselves.</p>
                         </div>
                     </div>
                 </li>
                 <li class="timeline-inverted">
-                    <div class="timeline-image">
+                    <div class="timeline-image d-flex align-items-center justify-content-center">
                         <h4>
                             Be Part
                             <br />
@@ -221,6 +258,7 @@
                     </div>
                 </li>
             </ul>
+
         </div>
     </section>
     <!-- Team-->
@@ -228,7 +266,7 @@
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">Our Amazing Team</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                <h3 class="section-subheading text-muted">The brains behind CashPlug.</h3>
             </div>
             <div class="row">
                 <div class="col-lg-4">
@@ -246,7 +284,7 @@
                     <div class="team-member">
                         <img class="mx-auto rounded-circle" src="{{ asset('landing-page/assets/img/team/2.jpg') }}"
                             alt="..." />
-                        <h4>Diana Petersen</h4>
+                        <h4>Samuel Sambo</h4>
                         <p class="text-muted">Lead Marketer</p>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
@@ -257,7 +295,7 @@
                     <div class="team-member">
                         <img class="mx-auto rounded-circle" src="{{ asset('landing-page/assets/img/team/3.jpg') }}"
                             alt="..." />
-                        <h4>Larry Parker</h4>
+                        <h4>Walshak Apollos</h4>
                         <p class="text-muted">Lead Developer</p>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-twitter"></i></a>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
@@ -267,8 +305,8 @@
             </div>
             <div class="row">
                 <div class="col-lg-8 mx-auto text-center">
-                    <p class="large text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque,
-                        laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde.</p>
+                    <p class="large text-muted">CashPlug was made to bring people together, because it started with
+                        people coming together.</p>
                 </div>
             </div>
         </div>
@@ -278,20 +316,20 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-3 col-sm-6 my-3">
-                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="assets/img/logos/microsoft.svg"
-                            alt="..." /></a>
+                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto"
+                            src="{{ asset('landing-page/assets/img/logos/fluterwave.png') }}" alt="..." /></a>
                 </div>
                 <div class="col-md-3 col-sm-6 my-3">
-                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="assets/img/logos/google.svg"
-                            alt="..." /></a>
+                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto"
+                            src="{{ asset('landing-page/assets/img/logos/uba.png') }}" alt="..." /></a>
                 </div>
                 <div class="col-md-3 col-sm-6 my-3">
-                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="assets/img/logos/facebook.svg"
-                            alt="..." /></a>
+                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto"
+                            src="{{ asset('landing-page/assets/img/logos/ocean.png') }}" alt="..." /></a>
                 </div>
                 <div class="col-md-3 col-sm-6 my-3">
-                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto" src="assets/img/logos/ibm.svg"
-                            alt="..." /></a>
+                    <a href="#!"><img class="img-fluid img-brand d-block mx-auto"
+                            src="{{ asset('landing-page/assets/img/logos/paystack.png') }}" alt="..." /></a>
                 </div>
             </div>
         </div>
@@ -343,7 +381,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-4 text-lg-start">
-                    Copyright &copy; Your Website
+                    Copyright &copy; CashPlug
                     <!-- This script automatically adds the current year to your website footer-->
                     <!-- (credit: https://updateyourfooter.com/)-->
                     <script>
@@ -362,252 +400,7 @@
             </div>
         </div>
     </footer>
-    <!-- services Modals-->
-    <!-- services item 1 modal popup-->
-    <div class="services-modal modal fade" id="servicesModal1" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project details-->
-                                <h2 class="text-uppercase">Project Name</h2>
-                                <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                                <img class="img-fluid d-block mx-auto"
-                                    src="{{ asset('landing-page/assets/img/services/1.jpg') }}" alt="..." />
-                                <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                    repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                    nostrum, reiciendis facere nemo!</p>
-                                <ul class="list-inline">
-                                    <li>
-                                        <strong>Client:</strong>
-                                        Threads
-                                    </li>
-                                    <li>
-                                        <strong>Category:</strong>
-                                        Illustration
-                                    </li>
-                                </ul>
-                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
-                                    type="button">
-                                    <i class="fas fa-times me-1"></i>
-                                    Close Project
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- services item 2 modal popup-->
-    <div class="services-modal modal fade" id="servicesModal2" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-bs-dismiss="modal"><img
-                        src="{{ asset('landing-page/assets/img/close-icon.svg') }}" alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project details-->
-                                <h2 class="text-uppercase">Project Name</h2>
-                                <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                                <img class="img-fluid d-block mx-auto"
-                                    src="{{ asset('landing-page/assets/img/services/2.jpg') }}" alt="..." />
-                                <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                    repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                    nostrum, reiciendis facere nemo!</p>
-                                <ul class="list-inline">
-                                    <li>
-                                        <strong>Client:</strong>
-                                        Explore
-                                    </li>
-                                    <li>
-                                        <strong>Category:</strong>
-                                        Graphic Design
-                                    </li>
-                                </ul>
-                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
-                                    type="button">
-                                    <i class="fas fa-times me-1"></i>
-                                    Close Project
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- services item 3 modal popup-->
-    <div class="services-modal modal fade" id="servicesModal3" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-bs-dismiss="modal"><img
-                        src="{{ asset('landing-page/assets/img/close-icon.svg') }}" alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project details-->
-                                <h2 class="text-uppercase">Project Name</h2>
-                                <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                                <img class="img-fluid d-block mx-auto"
-                                    src="{{ asset('landing-page/assets/img/services/3.jpg') }}" alt="..." />
-                                <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                    repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                    nostrum, reiciendis facere nemo!</p>
-                                <ul class="list-inline">
-                                    <li>
-                                        <strong>Client:</strong>
-                                        Finish
-                                    </li>
-                                    <li>
-                                        <strong>Category:</strong>
-                                        Identity
-                                    </li>
-                                </ul>
-                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
-                                    type="button">
-                                    <i class="fas fa-times me-1"></i>
-                                    Close Project
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- services item 4 modal popup-->
-    <div class="services-modal modal fade" id="servicesModal4" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-bs-dismiss="modal"><img
-                        src="a{{ asset('landing-page/assets/img/close-icon.svg') }}" alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project details-->
-                                <h2 class="text-uppercase">Project Name</h2>
-                                <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                                <img class="img-fluid d-block mx-auto"
-                                    src="{{ asset('landing-page/assets/img/services/4.jpg') }}" alt="..." />
-                                <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                    repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                    nostrum, reiciendis facere nemo!</p>
-                                <ul class="list-inline">
-                                    <li>
-                                        <strong>Client:</strong>
-                                        Lines
-                                    </li>
-                                    <li>
-                                        <strong>Category:</strong>
-                                        Branding
-                                    </li>
-                                </ul>
-                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
-                                    type="button">
-                                    <i class="fas fa-times me-1"></i>
-                                    Close Project
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- services item 5 modal popup-->
-    <div class="services-modal modal fade" id="servicesModal5" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-bs-dismiss="modal"><img
-                        src="{{ asset('landing-page/assets/img/close-icon.svg') }}" alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project details-->
-                                <h2 class="text-uppercase">Project Name</h2>
-                                <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                                <img class="img-fluid d-block mx-auto"
-                                    src="{{ asset('landing-page/assets/img/services/5.jpg') }}" alt="..." />
-                                <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                    repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                    nostrum, reiciendis facere nemo!</p>
-                                <ul class="list-inline">
-                                    <li>
-                                        <strong>Client:</strong>
-                                        Southwest
-                                    </li>
-                                    <li>
-                                        <strong>Category:</strong>
-                                        Website Design
-                                    </li>
-                                </ul>
-                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
-                                    type="button">
-                                    <i class="fas fa-times me-1"></i>
-                                    Close Project
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- services item 6 modal popup-->
-    <div class="services-modal modal fade" id="servicesModal6" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-bs-dismiss="modal"><img src="assets/img/close-icon.svg"
-                        alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project details-->
-                                <h2 class="text-uppercase">Project Name</h2>
-                                <p class="item-intro text-muted">Lorem ipsum dolor sit amet consectetur.</p>
-                                <img class="img-fluid d-block mx-auto" src="assets/img/services/6.jpg" alt="..." />
-                                <p>Use this area to describe your project. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Est blanditiis dolorem culpa incidunt minus dignissimos deserunt
-                                    repellat aperiam quasi sunt officia expedita beatae cupiditate, maiores repudiandae,
-                                    nostrum, reiciendis facere nemo!</p>
-                                <ul class="list-inline">
-                                    <li>
-                                        <strong>Client:</strong>
-                                        Window
-                                    </li>
-                                    <li>
-                                        <strong>Category:</strong>
-                                        Photography
-                                    </li>
-                                </ul>
-                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal"
-                                    type="button">
-                                    <i class="fas fa-times me-1"></i>
-                                    Close Project
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->

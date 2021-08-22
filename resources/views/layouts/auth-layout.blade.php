@@ -24,7 +24,8 @@
 <![endif]-->
 </head>
 
-<body>
+<body style="background-image: url('{{asset('landing-page/assets/img/header-bg.jpg')}}'); background-repeat: no-repeat; background-attachment: fixed;
+background-size: cover;">
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -64,6 +65,7 @@
                 <!-- ============================================================== -->
                     <div class="card mt-5">
                         <div class="card-body">
+                            <a href="{{route('landing-page')}}"> Home </a>
                             @yield('content')
                         </div>
                     </div>
