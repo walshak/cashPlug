@@ -16,10 +16,7 @@ class AccountController extends Controller
      *
      */
     public function get_banks(){
-        $response = Http::withToken(env('PAYSTACK_SK_KEY'))->get('https://api.paystack.co/bank',[
-            'country' => 'nigeria',
-            'currency' => 'NGN'
-        ]);
+        $response = Http::withToken(env('SK_KEY'))->get('https://api.flutterwave.com/v3/banks/NG');
         if($response->status()==200){
             return response($response->body());
         }else{

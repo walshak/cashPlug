@@ -146,7 +146,7 @@ class Controller extends BaseController
         $plan_id = Plan::find($_GET['plan-id'])->id;
         $payment_refrence = intval($_GET['reference']);
         //verify payment status
-        $response = Http::withToken(env('PAYSTACK_SK_KEY'))->get('https://api.paystack.co/transaction/verify/'.$payment_refrence);
+        $response = Http::withToken(env('SK_KEY'))->get('https://api.flutterwave.com/v3/transactions/'.$payment_refrence.'/verify');
         //dd($response);
         if ($response->status() == 200) {
             if (!$this->hasActivePlan()) {

@@ -170,14 +170,14 @@
                                             account_number_status.removeClass('text-danger')
                                             account_number_status.addClass('text-success');
                                             account_number_status.text('Valid');
-                                            account_name.val(data.data.details.account_name);
-                                            bank_name.val(data.data.details.bank_name);
+                                            account_name.val(data.data.account_name);
+                                            //bank_name.val(data.data.details.bank_name);
                                             recipient_code.val(data.data.recipient_code);
-                                            account_name_field.text('Account Name: ' + data.data.details.account_name);
-                                            console.log(data.data.details);
+                                            account_name_field.text('Account Name: ' + data.data.account_name);
+                                            console.log(data.data);
                                             spinner.hide();
                                             submit_btn.show();
-                                            $('#acc_no').val(data.data.details.account_number);
+                                            $('#acc_no').val(data.data.account_number);
 
                                             //return data
                                         },
