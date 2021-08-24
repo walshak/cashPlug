@@ -146,7 +146,7 @@
                                     <i class="fas fa-check"></i> Min withdarwal
                                     {{ $plan->price * 4 * env('USER_PERCENTAGE') }} NGN <br>
                                 </p>
-                                <a href="{{ route('users.subscribe', $plan->id) }}" class="btn btn-warning">
+                                <a href="{{ route('register') }}" class="btn btn-warning">
                                     Subscribe
                                 </a>
                             </div>
