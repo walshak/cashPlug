@@ -4,11 +4,11 @@
     @include('layouts.errors')
     @if ($plan_active == false)
         <div class="alert alert-warning" role="alert">
-            You currently have no active plan <a class="btn btn-primary" href="{{ route('users.settings') }}">Select
+            You currently have no active plan <a class="btn btn-primary" href="{{ route('super-admin.settings') }}">Select
                 Plan</a>
         </div>
     @endif
-    <div class="container">
+    <div class="container ">
         <div class="row">
             @if ($plan_active)
                 <div class="col-sm-12">
@@ -48,7 +48,7 @@
                                 </div>
                             </div>
                             <a href="#" class="btn btn-warning disabled"> Subscribed</a>
-                            @if (($bal_for_cur_cycle >= $cur_plan->price * 2 * env('USER_PERCENTAGE'))&& ($withrawal_requested == false))
+                            @if ($bal_for_cur_cycle >= $cur_plan->price * 2 * env('USER_PERCENTAGE') && $withrawal_requested == false)
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
@@ -66,7 +66,8 @@
                                                     aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="{{ route('super-admin.request-withdrawal') }}" method="post">
+                                                <form action="{{ route('super-admin.request-withdrawal') }}"
+                                                    method="post">
                                                     @csrf
                                                     <label for="">Amount</label>
                                                     <input type="number" name="amount" id="" class="form-control" min="0"
@@ -89,39 +90,119 @@
                             @endif
                         </div>
                         <div class="card-footer">
-                            <div class="form-group">
-                                <label for="">Your referral link</label>
-                                <input type="text" value="{{route('register',['ref_id'=>Auth::user()->ref_id])}}" class="form-control form-control-lg disabled">
+                            <label for="">Your ref link</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control form-control-lg" id="ref_link"
+                                    value="{{ route('register', ['ref_id' => Auth::user()->ref_id]) }}" readonly>
+                                <span class="input-group-text" id="basic-addon2"><span onclick="copyTextFunction()">Copy
+                                        Link</span></span>
                             </div>
+                            <script>
+                                function copyTextFunction() {
+                                    /* Get the text field */
+                                    var copyText = document.getElementById("ref_link");
+
+                                    /* Select the text field */
+                                    copyText.select();
+                                    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+                                    /* Copy the text inside the text field */
+                                    navigator.clipboard.writeText(copyText.value);
+
+                                    /* Alert the copied text */
+                                    alert("Link Copied");
+                                }
+                            </script>
                         </div>
                     </div>
                 </div>
             @else
-                @foreach ($plans as $plan)
-                    <div class="col-sm-4">
-                        <div class="card">
-                            <img src="{{ asset('landing-page/assets/img/header-bg.jpg') }}" alt=""
-                                class="card-image-top">
-                            <div class="card-body">
-                                <h3>{{ $plan->name }}</h3>
-                                <p>
-                                    <i class="fas fa-check"></i> {{ $plan->refs }} refrals per cycle <br>
-                                    <i class="fas fa-check"></i> {{ $plan->price }} NGN <br>
-                                    <i class="fas fa-check"></i> {{ $plan->validity }} Days <br>
-                                    <i class="fas fa-check"></i> Make at least
-                                    {{ $plan->price * $plan->refs * env('USER_PERCENTAGE') }}k <br>
-                                    <i class="fas fa-check"></i> Min withdarwal
-                                    {{ $plan->price * 2 * env('USER_PERCENTAGE') }}k <br>
-                                </p>
-                                <a href="{{ route('users.subscribe', $plan->id) }}" class="btn btn-warning"> Subscribe
-                                </a>
-                                <br>
+                @if (Auth::user()->account)
+                    @foreach ($plans as $plan)
+                        <div class="col-sm-4">
+                            <div class="card">
+                                {{-- <img src="{{ asset('landing-page/assets/img/header-bg.jpg') }}" alt=""
+                                        class="card-image-top"> --}}
+                                <div class="card-body">
+                                    <h3>{{ $plan->name }}</h3>
+                                    <p>
+                                        <i class="fas fa-check"></i> {{ $plan->refs }} refrals per cycle <br>
+                                        <i class="fas fa-check"></i> {{ $plan->price }} NGN <br>
+                                        <i class="fas fa-check"></i> {{ $plan->validity }} Days <br>
+                                        <i class="fas fa-check"></i> Make at least
+                                        {{ $plan->price * $plan->refs * env('USER_PERCENTAGE') }}k <br>
+                                        <i class="fas fa-check"></i> Min withdarwal
+                                        {{ $plan->price * 4 * env('USER_PERCENTAGE') }}k <br>
+                                    </p>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-warning"
+                                        onclick="$('#paymentForm{{ $plan->id }}').toggle()">
+                                        Subscribe
+                                    </button>
+                                    <form id="paymentForm{{ $plan->id }}" style="display: none"
+                                        class="row row-cols-lg-auto">
+                                        <div class="form-group">
+                                            <label for="email">Email Address</label>
+                                            <input type="email" id="email-address{{ $plan->id }}" required
+                                                value="{{ Auth::user()->email }}" class="form-control" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="amount">Amount</label>
+                                            <input type="tel" id="amount{{ $plan->id }}" required
+                                                value="{{ $plan->price }}" class="form-control" readonly />
+                                        </div>
+                                        <div class="form-submit">
+                                            <button type="submit" class="btn btn-primary"
+                                                onclick="payWithPaystack{{ $plan->id }}()"> Pay Now
+                                            </button>
+                                            <button type="button" class="btn btn-warning m-3"
+                                                onclick="$('#paymentForm{{ $plan->id }}').toggle()">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </form>
 
+                                    <script>
+                                        $(document).ready(function() {
+                                            const paymentForm{{ $plan->id }} = document.getElementById('paymentForm{{ $plan->id }}');
+                                            paymentForm{{ $plan->id }}.addEventListener("submit", payWithPaystack{{ $plan->id }}, false);
+
+                                            function payWithPaystack{{ $plan->id }}(e) {
+                                                e.preventDefault();
+                                                let handler = PaystackPop.setup({
+                                                    key: '{{ env('PAYSTACK_PK_KEY') }}', // Replace with your public key
+                                                    email: document.getElementById("email-address{{ $plan->id }}").value,
+                                                    amount: document.getElementById("amount{{ $plan->id }}").value * 100,
+                                                    ref: '' + Math.floor((Math.random() * 1000000000000) +
+                                                        1
+                                                    ), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+                                                    onClose: function() {
+                                                        alert('Window closed.');
+                                                    },
+                                                    callback: function(response) {
+                                                        window.location =
+                                                            "{{ url('subscribe') }}?plan-id={{ $plan->id }}&reference=" +
+                                                            response
+                                                            .reference;
+                                                    }
+                                                });
+                                                handler.openIframe();
+                                            }
+                                        });
+                                    </script>
+                                </div>
                             </div>
                         </div>
+                    @endforeach
+                    {{ $plans->links() }}
+                @else
+                    <div class="card">
+                        <div class="card-body">
+                            <p>You have not added a bank account yet, <a href="{{ route('super-admin.profile') }}"
+                                    class="btn btn-primary">Add account</a></p>
+                        </div>
                     </div>
-                @endforeach
-                {{ $plans->links() }}
+                @endif
             @endif
         </div>
     </div>

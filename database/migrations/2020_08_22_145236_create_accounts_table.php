@@ -18,7 +18,9 @@ class CreateAccountsTable extends Migration
             $table->string('account_name');
             $table->string('account_number');
             $table->string('bank');
+            $table->string('bank_code');
             $table->string('bvn')->nullable();
+            $table->string('recipient_code');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

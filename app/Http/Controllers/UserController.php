@@ -45,7 +45,7 @@ class UserController extends Controller
                 'withrawal_requested' => parent::hasRequestedWithdrawal()
             ]);
         } else {
-            $plans = Plan::all();
+            $plans = Plan::paginate(env('PER_PAGE'));
             return view('dashboards.users.settings')->with([
                 'plan_active' => parent::hasActivePlan(),
                 'plans' => $plans

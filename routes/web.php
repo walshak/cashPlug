@@ -8,6 +8,7 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\AccountController;
 use App\Http\Middleware\isActive;
 use GuzzleHttp\Middleware;
 use phpDocumentor\Reflection\Types\Resource_;
@@ -31,6 +32,10 @@ Route::get('/', function () {
     ]);
 })->name('landing-page');
 
+Route::get('get_banks',[AccountController::class,'get_banks'])->name('get.banks');
+Route::get('verify_account',[AccountController::class,'verify_account'])->name('account.verify');
+Route::post('add_bank_details',[AccountController::class,'create'])->name('account.add');
+
 Auth::routes();
 
 Route::get('suspended-user',function(){
@@ -40,6 +45,7 @@ Route::get('suspended-user',function(){
 Route::get('users/verify',function(){
     return view('auth.verify');
 })->middleware(['auth'])->name('verification.verify');
+Route::get('subscribe',[Controller::class,'subscribe'])->middleware('auth')->name('super-admin.subscribe');
 
 Route::post('/users/update-profile', [UserController::class, 'update_profile'])->middleware(['auth'])->name('users.update-profile');
 Route::post('/admins/update-profile', [AdminController::class, 'update_profile'])->middleware(['auth'])->name('admins.update-profile');
@@ -49,7 +55,7 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','isActive']],function(){
     Route::get('dashboard',[AdminController::class,'index'])->name('admin.dashboard');
     Route::get('profile',[AdminController::class,'profile'])->name('admin.profile');
     Route::get('settings',[AdminController::class,'settings'])->name('admin.settings');
-    Route::get('subscribe/{plan_id}',[AdminController::class,'subscribe'])->name('admin.subscribe');
+    //Route::get('subscribe',[Controller::class,'subscribe'])->name('admin.subscribe');
     Route::post('request-withdrawal',[Controller::class,'request_withdrawal'])->name('admin.request-withdrawal');
     Route::get('suspend-user-page/{user_id?}',[Controller::class,'suspend_user_page'])->name('admin.suspend-user-page');
     Route::get('suspend-user/list/{user_id?}',[Controller::class,'suspend_user'])->name('admin.suspend-user');
@@ -61,7 +67,7 @@ Route::group(['prefix'=>'users','middleware'=>['auth','isUser','isActive']],func
     Route::get('dashboard',[UserController::class,'index'])->name('users.dashboard');
     Route::get('profile',[UserController::class,'profile'])->name('users.profile');
     Route::get('settings',[UserController::class,'settings'])->name('users.settings');
-    Route::get('subscribe/{plan_id}',[UserController::class,'subscribe'])->name('users.subscribe');
+    //Route::get('subscribe',[Controller::class,'subscribe'])->name('users.subscribe');
     Route::post('request-withdrawal',[Controller::class,'request_withdrawal'])->name('users.request-withdrawal');
 });
 
@@ -69,7 +75,7 @@ Route::group(['prefix'=>'super-admin','middleware'=>['auth','isSuperAdmin','isAc
     Route::get('dashboard',[SuperAdminController::class,'index'])->name('super-admin.dashboard');
     Route::get('profile',[SuperAdminController::class,'profile'])->name('super-admin.profile');
     Route::get('settings',[SuperAdminController::class,'settings'])->name('super-admin.settings');
-    Route::get('subscribe/{plan_id}',[AdminController::class,'subscribe'])->name('super-admin.subscribe');
+
     Route::post('request-withdrawal',[Controller::class,'request_withdrawal'])->name('super-admin.request-withdrawal');
     // Route::get('suspend-user',[Controller::class,'suspend_user'])->name('super-admin.suspend-user');
     // Route::get('approve-payment',[Controller::class,'approve_payment'])->name('super-admin.approve-payment');

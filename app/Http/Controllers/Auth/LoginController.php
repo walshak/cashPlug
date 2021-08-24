@@ -59,10 +59,12 @@ class LoginController extends Controller
     {
         $inputs = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
+            'remember' => 'nullable'
+
         ]);
 
-        if(Auth::attempt(['email' => $inputs['email'], 'password' => $inputs['password']]))
+        if(Auth::attempt(['email' => $inputs['email'], 'password' => $inputs['password']],$inputs['remember']))
         {
             if(Auth::user()->role == 2){
                 return redirect()->route('users.dashboard');

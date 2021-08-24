@@ -5,7 +5,8 @@
     <div class="container">
         @if ($plan_active == false)
             <div class="alert alert-warning" role="alert">
-                You currently have no active plan <a class="btn btn-primary" href="{{ route('users.settings') }}">Select
+                You currently have no active plan <a class="btn btn-primary"
+                    href="{{ route('super-admin.settings') }}">Select
                     Plan</a>
             </div>
         @endif
@@ -82,14 +83,33 @@
                 <div class="card-body">
                     <h4>Member since</h4>
                     <span>{{ date('d M Y', strtotime($user->created_at)) }}</span><br><br>
-                    <div class="form-group">
-                        <label for="">Your referral link</label>
-                        <input type="text" value="{{ route('register', ['ref_id' => Auth::user()->ref_id]) }}"
-                            class="form-control form-control-lg disabled">
+                    <label for="">Your ref link</label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-lg" id="ref_link"
+                            value="{{ route('register', ['ref_id' => Auth::user()->ref_id]) }}" readonly>
+                        <span class="input-group-text" id="basic-addon2"><span onclick="copyTextFunction()">Copy
+                                Link</span></span>
                     </div>
+                    <script>
+                        function copyTextFunction() {
+                            /* Get the text field */
+                            var copyText = document.getElementById("ref_link");
+
+                            /* Select the text field */
+                            copyText.select();
+                            copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+                            /* Copy the text inside the text field */
+                            navigator.clipboard.writeText(copyText.value);
+
+                            /* Alert the copied text */
+                            alert("Link Copied");
+                        }
+                    </script>
                     <a href="{{ route('super-admin.settings') }}" class="btn btn-primary">See detailed info</a>
                 </div>
             </div>
         </div>
     </div>
+
 @endsection

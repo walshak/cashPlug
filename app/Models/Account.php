@@ -17,7 +17,9 @@ class Account extends Model
         'account_name',
         'account_number',
         'bank',
+        'bank_code',
         'bvn',
+        'recipient_code',
         'user_id'
     ];
 }

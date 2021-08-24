@@ -89,36 +89,67 @@
                             @endif
                         </div>
                         <div class="card-footer">
-                            <div class="form-group">
-                                <label for="">Your referral link</label>
-                                <input type="text" value="{{route('register',['ref_id'=>Auth::user()->ref_id])}}" class="form-control form-control-lg disabled">
+                            <label for="">Your ref link</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control form-control-lg" id="ref_link"
+                                    value="{{ route('register', ['ref_id' => Auth::user()->ref_id]) }}" readonly>
+                                <span class="input-group-text" id="basic-addon2"><span onclick="copyTextFunction()">Copy
+                                        Link</span></span>
                             </div>
+                            <script>
+                                function copyTextFunction() {
+                                    /* Get the text field */
+                                    var copyText = document.getElementById("ref_link");
+
+                                    /* Select the text field */
+                                    copyText.select();
+                                    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+                                    /* Copy the text inside the text field */
+                                    navigator.clipboard.writeText(copyText.value);
+
+                                    /* Alert the copied text */
+                                    alert("Link Copied");
+                                }
+                            </script>
                         </div>
                     </div>
                 </div>
             @else
-                @foreach ($plans as $plan)
-                    <div class="col-sm-4">
-                        <div class="card">
-                            <img src="{{ asset('landing-page/assets/img/header-bg.jpg') }}" alt=""
-                                class="card-image-top">
-                            <div class="card-body">
-                                <h3>{{ $plan->name }}</h3>
-                                <p>
-                                    <i class="fas fa-check"></i> {{ $plan->refs }} refrals per cycle <br>
-                                    <i class="fas fa-check"></i> {{ $plan->price }} NGN <br>
-                                    <i class="fas fa-check"></i> {{ $plan->validity }} Days <br>
-                                    <i class="fas fa-check"></i> Make at least
-                                    {{ $plan->price * $plan->refs * env('USER_PERCENTAGE') }}k <br>
-                                    <i class="fas fa-check"></i> Min withdarwal
-                                    {{ $plan->price * 2 * env('USER_PERCENTAGE') }}k <br>
-                                </p>
-                                <a href="{{ route('users.subscribe', $plan->id) }}" class="btn btn-warning"> Subscribe
-                                </a>
+                @if (Auth::user()->account)
+                    @foreach ($plans as $plan)
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <img src="{{ asset('landing-page/assets/img/header-bg.jpg') }}" alt=""
+                                    class="card-image-top">
+                                <div class="card-body">
+                                    <h3>{{ $plan->name }}</h3>
+                                    <p>
+                                        <i class="fas fa-check"></i> {{ $plan->refs }} refrals per cycle <br>
+                                        <i class="fas fa-check"></i> {{ $plan->price }} NGN <br>
+                                        <i class="fas fa-check"></i> {{ $plan->validity }} Days <br>
+                                        <i class="fas fa-check"></i> Make at least
+                                        {{ $plan->price * $plan->refs * env('USER_PERCENTAGE') }}k <br>
+                                        <i class="fas fa-check"></i> Min withdarwal
+                                        {{ $plan->price * 4 * env('USER_PERCENTAGE') }}k <br>
+                                    </p>
+                                    <a href="{{ route('users.subscribe', $plan->id) }}"
+                                        onclick="return confirm('are you sure you want to pay for this plan?');"
+                                        class="btn btn-warning"> Subscribe
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                    @endforeach
+                    {{ $plans->links() }}
+                @else
+                    <div class="card">
+                        <div class="card-body">
+                            <p>You have not added a bank account yet, <a href="{{ route('users.profile') }}"
+                                    class="btn btn-primary">Add account</a></p>
+                        </div>
                     </div>
-                @endforeach
+                @endif
             @endif
         </div>
     </div>

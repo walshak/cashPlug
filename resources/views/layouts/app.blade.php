@@ -15,23 +15,24 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
     <!-- Custom CSS -->
-   <link href="{{asset('css/style.min.css')}}" rel="stylesheet">
-   {{-- <link rel="stylesheet" type="text/css" href="{{asset('DataTables/datatables.min.css')}}"/> --}}
-   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.css"/>
-   <script src="{{asset('plugins/bower_components/jquery/dist/jquery.min.js')}}"></script>
+    <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">
+    {{-- <link rel="stylesheet" type="text/css" href="{{asset('DataTables/datatables.min.css')}}"/> --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="{{asset('bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('js/app-style-switcher.js')}}"></script>
+    <script src="{{ asset('bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/app-style-switcher.js') }}"></script>
 
     {{-- datatabeles --}}
     {{-- <script type="text/javascript" src="{{asset('DataTables/datatables.min.js')}}"></script> --}}
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.js"></script>
     <!--Wave Effects -->
-    <script src="{{asset('js/waves.js')}}"></script>
+    <script src="{{ asset('js/waves.js') }}"></script>
     <!--Menu sidebar -->
-    <script src="{{asset('js/sidebarmenu.js')}}"></script>
+    <script src="{{ asset('js/sidebarmenu.js') }}"></script>
     <!--Custom JavaScript -->
-    <script src="{{asset('js/custom.js')}}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -58,54 +59,54 @@
         <!-- ============================================================== -->
         <!-- Topbar header - style you can find in pages.scss -->
         <!-- ============================================================== -->
-            {{-- Topbar content --}}
-            @include('layouts.topbar')
+        {{-- Topbar content --}}
+        @include('layouts.topbar')
         <!-- ============================================================== -->
         <!-- End Topbar header -->
         <!-- ============================================================== -->
         <!-- ============================================================== -->
         <!-- Left Sidebar - style you can find in sidebar.scss  -->
         <!-- ============================================================== -->
-            {{-- sidebar content --}}
-            @include('layouts.sidebar')
+        {{-- sidebar content --}}
+        @include('layouts.sidebar')
+        <!-- ============================================================== -->
+        <!-- End Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
             <!-- ============================================================== -->
-            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- Start Page Content -->
             <!-- ============================================================== -->
+            @yield('content')
             <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
-                <!-- ============================================================== -->
-                <!-- Start Page Content -->
-                <!-- ============================================================== -->
-                    @yield('content')
-                <!-- ============================================================== -->
-                <!-- End PAge Content -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Right sidebar -->
-                <!-- ============================================================== -->
-                <!-- .right-sidebar -->
-                <!-- ============================================================== -->
-                <!-- End Right sidebar -->
-                <!-- ============================================================== -->
-            </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
+            <!-- End PAge Content -->
             <!-- ============================================================== -->
             <!-- ============================================================== -->
-            <!-- footer -->
+            <!-- Right sidebar -->
             <!-- ============================================================== -->
-            <footer class="footer text-center"> {{date('Y')}} © Cashplug africa brought to you by <a
-                    href="https://www.cashplug.com/">Cashplug.com</a>
-            </footer>
+            <!-- .right-sidebar -->
             <!-- ============================================================== -->
-            <!-- End footer -->
+            <!-- End Right sidebar -->
             <!-- ============================================================== -->
         </div>
         <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
+        <!-- End Container fluid  -->
         <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <footer class="footer text-center"> {{ date('Y') }} © Cashplug africa brought to you by <a
+                href="https://www.cashplug.com/">Cashplug.com</a>
+        </footer>
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
     <!-- End Wrapper -->

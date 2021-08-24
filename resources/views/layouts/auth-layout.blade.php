@@ -15,7 +15,9 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
     <!-- Custom CSS -->
-   <link href="{{asset('css/style.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -24,7 +26,7 @@
 <![endif]-->
 </head>
 
-<body style="background-image: url('{{asset('landing-page/assets/img/header-bg.jpg')}}'); background-repeat: no-repeat; background-attachment: fixed;
+<body style="background-image: url('{{ asset('landing-page/assets/img/header-bg.jpg') }}'); background-repeat: no-repeat; background-attachment: fixed;
 background-size: cover;">
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
@@ -43,59 +45,59 @@ background-size: cover;">
         <!-- ============================================================== -->
         <!-- Topbar header - style you can find in pages.scss -->
         <!-- ============================================================== -->
-            {{-- Topbar content --}}
-            {{-- @include('layouts.topbar') --}}
+        {{-- Topbar content --}}
+        {{-- @include('layouts.topbar') --}}
         <!-- ============================================================== -->
         <!-- End Topbar header -->
         <!-- ============================================================== -->
         <!-- ============================================================== -->
         <!-- Left Sidebar - style you can find in sidebar.scss  -->
         <!-- ============================================================== -->
-            {{-- sidebar content --}}
-            {{-- @include('layouts.sidebar') --}}
+        {{-- sidebar content --}}
+        {{-- @include('layouts.sidebar') --}}
+        <!-- ============================================================== -->
+        <!-- End Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
             <!-- ============================================================== -->
-            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- Start Page Content -->
             <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
-                <!-- ============================================================== -->
-                <!-- Start Page Content -->
-                <!-- ============================================================== -->
-                    <div class="card mt-5">
-                        <div class="card-body">
-                            <a href="{{route('landing-page')}}"> Home </a>
-                            @yield('content')
-                        </div>
-                    </div>
-                <!-- ============================================================== -->
-                <!-- End PAge Content -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Right sidebar -->
-                <!-- ============================================================== -->
-                <!-- .right-sidebar -->
-                <!-- ============================================================== -->
-                <!-- End Right sidebar -->
-                <!-- ============================================================== -->
+            <div class="card mt-5">
+                <div class="card-body">
+                    <a href="{{ route('landing-page') }}"> Home </a>
+                    @yield('content')
+                </div>
             </div>
             <!-- ============================================================== -->
-            <!-- End Container fluid  -->
+            <!-- End PAge Content -->
             <!-- ============================================================== -->
             <!-- ============================================================== -->
-            <!-- footer -->
+            <!-- Right sidebar -->
             <!-- ============================================================== -->
-            <footer class="footer text-center"> {{date('Y')}} © Cashplug <a
-                    href="https://www.cashplug.com/">cashplug.com</a>
-            </footer>
+            <!-- .right-sidebar -->
             <!-- ============================================================== -->
-            <!-- End footer -->
+            <!-- End Right sidebar -->
             <!-- ============================================================== -->
         </div>
         <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
+        <!-- End Container fluid  -->
         <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <footer class="footer text-center"> {{ date('Y') }} © Cashplug <a
+                href="https://www.cashplug.com/">cashplug.com</a>
+        </footer>
+        <!-- ============================================================== -->
+        <!-- End footer -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
     <!-- End Wrapper -->
@@ -103,16 +105,16 @@ background-size: cover;">
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="{{asset('plugins/bower_components/jquery/dist/jquery.min.js')}}"></script>
+    <script src="{{ asset('plugins/bower_components/jquery/dist/jquery.min.js') }}"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="{{asset('bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('js/app-style-switcher.js')}}"></script>
+    <script src="{{ asset('bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/app-style-switcher.js') }}"></script>
     <!--Wave Effects -->
-    <script src="{{asset('js/waves.js')}}"></script>
+    <script src="{{ asset('js/waves.js') }}"></script>
     <!--Menu sidebar -->
-    <script src="{{asset('js/sidebarmenu.js')}}"></script>
+    <script src="{{ asset('js/sidebarmenu.js') }}"></script>
     <!--Custom JavaScript -->
-    <script src="{{asset('js/custom.js')}}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
 </body>
 
 </html>
