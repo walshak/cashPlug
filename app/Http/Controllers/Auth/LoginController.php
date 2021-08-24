@@ -32,16 +32,11 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        if(Auth::user()->role == 2)
-        {
+        if (Auth::user()->role == 2) {
             return redirect()->route('user.dashboard');
-        }
-        elseif(Auth::user()->role ==1)
-        {
+        } elseif (Auth::user()->role == 1) {
             return redirect()->route('admin.dashboard');
-        }
-        elseif(Auth::user()->role == 0)
-        {
+        } elseif (Auth::user()->role == 0) {
             return redirect()->route('super-admin.dashboard');
         }
     }
@@ -57,26 +52,43 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $inputs = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-            'remember' => 'nullable'
+        if ($request->remember) {
+            $inputs = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+                'remember' => 'nullable'
 
-        ]);
-
-        if(Auth::attempt(['email' => $inputs['email'], 'password' => $inputs['password']],$inputs['remember']))
-        {
-            if(Auth::user()->role == 2){
-                return redirect()->route('users.dashboard');
-            }elseif(Auth::user()->role == 1){
-                return redirect()->route('admin.dashboard');
-            }elseif(Auth::user()->role == 0){
-                return redirect()->route('super-admin.dashboard');
+            ]);
+            if (Auth::attempt(['email' => $inputs['email'], 'password' => $inputs['password']], $inputs['remember'])) {
+                if (Auth::user()->role == 2) {
+                    return redirect()->route('users.dashboard');
+                } elseif (Auth::user()->role == 1) {
+                    return redirect()->route('admin.dashboard');
+                } elseif (Auth::user()->role == 0) {
+                    return redirect()->route('super-admin.dashboard');
+                }
+            } else {
+                return redirect()->route('login')->with('err', 'Incorrect email or password');
             }
-        }
-        else
-        {
-            return redirect()->route('login')->with('err','Incorrect email or password');
+        } else {
+
+            $inputs = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+
+            ]);
+
+            if (Auth::attempt(['email' => $inputs['email'], 'password' => $inputs['password']])) {
+                if (Auth::user()->role == 2) {
+                    return redirect()->route('users.dashboard');
+                } elseif (Auth::user()->role == 1) {
+                    return redirect()->route('admin.dashboard');
+                } elseif (Auth::user()->role == 0) {
+                    return redirect()->route('super-admin.dashboard');
+                }
+            } else {
+                return redirect()->route('login')->with('err', 'Incorrect email or password');
+            }
         }
     }
 }
