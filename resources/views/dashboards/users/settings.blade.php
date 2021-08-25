@@ -138,6 +138,40 @@
                                         onclick="$('#paymentForm{{ $plan->id }}').toggle()">
                                         Subscribe
                                     </button>
+                                    <script>
+                                        function makePayment{{ $plan->id }}() {
+                                            FlutterwaveCheckout({
+                                                public_key: "{{ env('PK_KEY') }}",
+                                                tx_ref: '' + Math.floor((Math.random() * 1000000000000) +
+                                                    1
+                                                ),
+                                                amount: document.getElementById("amount{{ $plan->id }}").value,
+                                                currency: "NGN",
+                                                country: "NG",
+                                                payment_options: "card,account,banktransfer,ussd",
+                                                callback: function(data) { // specified callback function
+                                                    console.log(data);
+                                                    window.location =
+                                                        "{{ url('subscribe') }}?plan-id={{ $plan->id }}&reference=" +
+                                                        data.transaction_id
+                                                },
+                                                customer: {
+                                                    email: document.getElementById("email-address{{ $plan->id }}").value,
+                                                    phone_number: "07050737402",
+                                                    name: "{{ Auth::user()->name }}",
+                                                },
+                                                onclose: function() {
+                                                    // close modal
+                                                    alert('Window closed.');
+                                                },
+                                                customizations: {
+                                                    title: "CashPlug Suscription",
+                                                    description: "{{ $plan->name }} plan",
+                                                    logo: "https://assets.piedpiper.com/logo.png",
+                                                },
+                                            });
+                                        }
+                                    </script>
                                     <form id="paymentForm{{ $plan->id }}" style="display: none"
                                         class="row row-cols-lg-auto">
                                         <div class="form-group">
@@ -151,8 +185,8 @@
                                                 value="{{ $plan->price }}" class="form-control" readonly />
                                         </div>
                                         <div class="form-submit">
-                                            <button type="submit" class="btn btn-primary"
-                                                onclick="payWithPaystack{{ $plan->id }}()"> Pay Now
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="makePayment{{ $plan->id }}()"> Pay Now
                                             </button>
                                             <button type="button" class="btn btn-warning m-3"
                                                 onclick="$('#paymentForm{{ $plan->id }}').toggle()">
@@ -160,35 +194,6 @@
                                             </button>
                                         </div>
                                     </form>
-
-                                    <script>
-                                        $(document).ready(function() {
-                                            const paymentForm{{ $plan->id }} = document.getElementById('paymentForm{{ $plan->id }}');
-                                            paymentForm{{ $plan->id }}.addEventListener("submit", payWithPaystack{{ $plan->id }}, false);
-
-                                            function payWithPaystack{{ $plan->id }}(e) {
-                                                e.preventDefault();
-                                                let handler = PaystackPop.setup({
-                                                    key: '{{ env('PAYSTACK_PK_KEY') }}', // Replace with your public key
-                                                    email: document.getElementById("email-address{{ $plan->id }}").value,
-                                                    amount: document.getElementById("amount{{ $plan->id }}").value * 100,
-                                                    ref: '' + Math.floor((Math.random() * 1000000000000) +
-                                                        1
-                                                    ), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
-                                                    onClose: function() {
-                                                        alert('Window closed.');
-                                                    },
-                                                    callback: function(response) {
-                                                        window.location =
-                                                            "{{ url('subscribe') }}?plan-id={{ $plan->id }}&reference=" +
-                                                            response
-                                                            .reference;
-                                                    }
-                                                });
-                                                handler.openIframe();
-                                            }
-                                        });
-                                    </script>
                                 </div>
                             </div>
                         </div>
