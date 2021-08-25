@@ -54,6 +54,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['regex:/^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/','required','unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'refferd_by'=> ['nullable','min:3','exists:users,ref_id']
         ]);
@@ -82,6 +83,7 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
             'refferd_by'=> $data['refferd_by'],
             'ref_id' => $this->create_ref_id($data['name'])

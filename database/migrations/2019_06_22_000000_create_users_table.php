@@ -17,6 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone');
             $table->integer('role')->default(2);
             $table->boolean('active')->default(1);
             $table->string('refferd_by')->nullable();

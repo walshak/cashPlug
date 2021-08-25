@@ -53,10 +53,11 @@ class SuperAdminController extends Controller
 
     public function update_profile(Request $request){
         $input = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email'
+            'name' => ['required'],
+            'email' => ['required','email','unique:users'],
+            'phone' => ['required','regex:/^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/','unique:users'],
         ]);
-
+        dd($input);
         $user = User::find(Auth::id());
         if($user->update($input)){
             return back()->with('msg','Profile Updated');

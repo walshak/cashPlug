@@ -60,6 +60,13 @@
                             </div>
                         </div>
                         <div class="form-group mb-4">
+                            <label for="example-phone" class="col-md-12 p-0">Phone</label>
+                            <div class="col-md-12 border-bottom p-0">
+                                <input type="text" value="{{ Auth::user()->phone }}" class="form-control p-0 border-0"
+                                    name="phone" placeholder="+2348066455789" id="example-phone">
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
                             <div class="col-sm-12">
                                 <button class="btn btn-success" type="submit">Update Profile</button>
                             </div>

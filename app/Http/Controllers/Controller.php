@@ -395,6 +395,18 @@ class Controller extends BaseController
         } else {
             $request = WithdrawalRequest::find($request_id);
             $user = $request->user;
+            $bank_code = $user->account->bank_code;
+            $account = $user->account->account_number;
+            // dd($bank_code);
+            $response = Http::withToken(env('SK_KEY'))->post('https://api.flutterwave.com/v3/transfers',[
+                'account_bank' => $bank_code,
+                'account_number' => $account,
+                'amount' => $request->amount,
+                'currency' => 'NGN',
+                'beneficiary_name' => $user->name
+
+            ]);
+            dd($response->body());
             //process payment
             return back()->with('msg', 'Withrawal request of user: ' . $user->name . ' approved');
         }
