@@ -138,7 +138,7 @@
                             <div class="card-body">
                                 <h3>{{ $plan->name }}</h3>
                                 <p>
-                                    <i class="fas fa-check"></i> {{ $plan->refs }} refrals per cycle <br>
+                                    <i class="fas fa-check"></i> {{ $plan->refs }} contributors per cycle <br>
                                     <i class="fas fa-check"></i> {{ $plan->price }} NGN <br>
                                     <i class="fas fa-check"></i> {{ $plan->validity }} Days <br>
                                     <i class="fas fa-check"></i> Make at least
