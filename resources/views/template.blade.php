@@ -86,9 +86,9 @@
                     <p class="text-muted">CashPlug Africa is an automated system that works for you. It is a proven
                         support chain system that will totally eradicate poverty using the power of Team work.
                         It is the Africans’ fastest and reliable platform to help you meet your financial goals...The
-                        moment you sign up and make a deposit you will be
-                        assigned automatically matched down-lines that work on your behalf and you get paid the moment
-                        your downlines meet the minimum requirements.
+                        moment you sign up and make a contribution you will be
+                        assigned automatically matched contributors that work on your behalf and you get paid the moment
+                        your contributors reach the needed number.
                     </p>
                 </div>
                 <div class="col-md-4">
@@ -101,7 +101,8 @@
                         a
                         team and the tasks are allocated according to the strengths and skills of each team member,
                         tasks are completed faster and more efficiently which results in a noticeable increase in
-                        productivity. With CashPlug, you become a member of a team, and that team works for you. With
+                        productivity. With CashPlug, you become a member of a team, and that team works for you and with
+                        you. With
                         our automated matching system, people around the globe support each other without even realizing
                         it by simply signing up and making a contribution on CashPlug.</p>
                 </div>
@@ -116,8 +117,7 @@
                         an existing member,and from then on, new members will be assigned to you too.With a guaranteed
                         plan and secure technical
                         setup(servers) your info is safe. All sensitive information is stored on a secure server and is
-                        not shared with anyone-not
-                        even your up-line or down-lines..</p>
+                        not shared with anyone.</p>
                 </div>
             </div>
         </div>
@@ -127,7 +127,7 @@
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">Plans</h2>
-                <h3 class="section-subheading text-muted">Here's a list of available plans</h3>
+                <h3 class="section-subheading text-muted">Here's a list of available contribution plans</h3>
             </div>
             <div class="row">
                 @foreach ($plans as $plan)
@@ -147,7 +147,7 @@
                                     {{ $plan->price * 4 * env('USER_PERCENTAGE') }} NGN <br>
                                 </p>
                                 <a href="{{ route('register') }}" class="btn btn-warning">
-                                    Subscribe
+                                    Contribute
                                 </a>
                             </div>
                         </div>
@@ -188,13 +188,17 @@
                             <h4 class="subheading">Activate a plan</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted"> Activate ANY plan by selecting it in the settings tab of your
+                            <p class="text-muted"> Activate ANY Contribution plan by selecting it in the settings tab of
+                                your
                                 dashboard (The screen you get after logging in) and making a
-                                payment (via our payment gateways) to activate the selected plan of choice. After a
+                                payment (via our payment gateways) to activate the selected Contribution plan of choice.
+                                After a
                                 successful payment(which serves as your contribution to whomever the system places you
-                                under-this would be the person who refers you, if you signed up with a referral link).
+                                under-this would be the person who invited you, if you signed up with an invitation
+                                link).
                                 Your account
-                                automatically opens and the system automatically starts placing new members under you
+                                automatically opens and the system automatically starts placing new Contributors under
+                                you
                             </p>
                         </div>
                     </div>
@@ -209,7 +213,8 @@
                         </div>
                         <div class="timeline-body">
                             <p class="text-muted">After the system automatically places the maximum nunber of
-                                automatic downlines(depends on your selected plan) under you, you will be able to
+                                automatic Contributors(depends on your selected contribution plan) under you, you will
+                                be able to
                                 withdraw your funds( subject to admin approval) directly to your bank account</p>
                         </div>
                     </div>
@@ -224,9 +229,10 @@
                             <h4 class="subheading">Renew</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">After Your withdrawal, you will be required to refer 1 person, upon
+                            <p class="text-muted">After Your withdrawal, you will be required to invite 1 person, upon
                                 confirmation, the system
-                                will automatically allow you to renew or upgrade your plan.</p>
+                                will automatically allow you to renew or upgrade your contribution plan if you wish to
+                                save more.</p>
                         </div>
                     </div>
                 </li>
@@ -236,13 +242,13 @@
                     </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
-                            <h4 class="subheading">Referral (optional)</h4>
+                            <h4 class="subheading">Invitation (optional)</h4>
                         </div>
                         <div class="timeline-body">
                             <p class="text-muted">CashPlug has an automatic system that helps members by automatically
-                                matching contributors to downlines, but members can cut the wait by sourcing for and
-                                referring
-                                donnlines for themselves.</p>
+                                matching contributors to other contributors, but members can cut the wait by sourcing
+                                for and
+                                inviting friends and family to contribute to them.</p>
                         </div>
                     </div>
                 </li>
@@ -339,7 +345,7 @@
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">Contact Us</h2>
-                <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                <h3 class="section-subheading text-muted">Get in touch with us.</h3>
             </div>
             <form id="contactForm">
                 <div class="row align-items-stretch mb-5">
