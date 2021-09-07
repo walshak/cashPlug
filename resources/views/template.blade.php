@@ -74,7 +74,7 @@
         <div class="container">
             <div class="text-center">
                 <h2 class="section-heading text-uppercase">About</h2>
-                <h3 class="section-subheading text-muted">About cashplug.</h3>
+                <h3 class="section-subheading text-muted">About cashplug (A subsidiary of Gloftech Nig. LTD).</h3>
             </div>
             <div class="row text-center">
                 <div class="col-md-4">
@@ -83,7 +83,7 @@
                         <i class="fas fa-robot fa-stack-1x fa-inverse"></i>
                     </span>
                     <h4 class="my-3">Automated</h4>
-                    <p class="text-muted">CashPlug Africa is an automated system that works for you. It is a proven
+                    <p class="text-muted">CashPlug Africa (A subsidiary of Gloftech Nig. LTD) is an automated system that works for you. It is a proven
                         support chain system that will totally eradicate poverty using the power of Team work.
                         It is the Africans’ fastest and reliable platform to help you meet your financial goals...The
                         moment you sign up and make a contribution you will be
@@ -387,7 +387,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-4 text-lg-start">
-                    Copyright &copy; CashPlug
+                    Copyright &copy; CashPlug. powered by Gloftech Nig.Ltd
                     <!-- This script automatically adds the current year to your website footer-->
                     <!-- (credit: https://updateyourfooter.com/)-->
                     <script>
