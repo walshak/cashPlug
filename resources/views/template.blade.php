@@ -387,7 +387,7 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-4 text-lg-start">
-                    Copyright &copy; CashPlug. powered by Gloftech Nig.Ltd
+                    Copyright &copy; CashPlug. powered by Gloftech Nig.Ltd (RC 1483714)
                     <!-- This script automatically adds the current year to your website footer-->
                     <!-- (credit: https://updateyourfooter.com/)-->
                     <script>

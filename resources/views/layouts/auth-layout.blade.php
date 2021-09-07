@@ -89,7 +89,7 @@ background-size: cover;">
         <!-- footer -->
         <!-- ============================================================== -->
         <footer class="footer text-center"> {{ date('Y') }} © Cashplug <a
-                href="https://www.cashplug.com/">cashplug.com</a> Powered by Gloftech Nig. LTD
+                href="https://www.cashplug.com/">cashplug.com</a> Powered by Gloftech Nig. LTD (RC 1483714)
         </footer>
         <!-- ============================================================== -->
         <!-- End footer -->
