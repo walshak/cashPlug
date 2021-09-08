@@ -9,6 +9,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\AccountController;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Middleware\isActive;
 use GuzzleHttp\Middleware;
 use phpDocumentor\Reflection\Types\Resource_;
@@ -32,6 +34,22 @@ Route::get('/', function () {
     ]);
 })->name('landing-page');
 
+Route::get('/email/verify', function () {
+    return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('msg', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
 Route::get('get_banks',[AccountController::class,'get_banks'])->name('get.banks');
 Route::get('verify_account',[AccountController::class,'verify_account'])->name('account.verify');
 Route::post('add_bank_details',[AccountController::class,'create'])->name('account.add');
@@ -42,16 +60,13 @@ Route::get('suspended-user',function(){
     return view('suspended-user');
 })->name('suspended-user');
 
-Route::get('users/verify',function(){
-    return view('auth.verify');
-})->middleware(['auth'])->name('verification.verify');
 Route::get('subscribe',[Controller::class,'subscribe'])->middleware('auth')->name('super-admin.subscribe');
 
 Route::post('/users/update-profile', [UserController::class, 'update_profile'])->middleware(['auth'])->name('users.update-profile');
 Route::post('/admins/update-profile', [AdminController::class, 'update_profile'])->middleware(['auth'])->name('admins.update-profile');
 Route::post('/super-admins/update-profile', [SuperAdminController::class, 'update_profile'])->middleware(['auth'])->name('super-admins.update-profile');
 
-Route::group(['prefix'=>'admin','middleware'=>['auth','isActive']],function(){
+Route::group(['prefix'=>'admin','middleware'=>['auth','isActive','verified']],function(){
     Route::get('dashboard',[AdminController::class,'index'])->name('admin.dashboard');
     Route::get('profile',[AdminController::class,'profile'])->name('admin.profile');
     Route::get('settings',[AdminController::class,'settings'])->name('admin.settings');
@@ -63,7 +78,7 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','isActive']],function(){
     Route::get('approve-payment/list/{request_id?}',[Controller::class,'approve_payment'])->name('admin.approve-payment');//get the data for the approve payment page
 });
 
-Route::group(['prefix'=>'users','middleware'=>['auth','isUser','isActive']],function(){
+Route::group(['prefix'=>'users','middleware'=>['auth','isUser','isActive','verified']],function(){
     Route::get('dashboard',[UserController::class,'index'])->name('users.dashboard');
     Route::get('profile',[UserController::class,'profile'])->name('users.profile');
     Route::get('settings',[UserController::class,'settings'])->name('users.settings');
@@ -71,7 +86,7 @@ Route::group(['prefix'=>'users','middleware'=>['auth','isUser','isActive']],func
     Route::post('request-withdrawal',[Controller::class,'request_withdrawal'])->name('users.request-withdrawal');
 });
 
-Route::group(['prefix'=>'super-admin','middleware'=>['auth','isSuperAdmin','isActive']],function(){
+Route::group(['prefix'=>'super-admin','middleware'=>['auth','isSuperAdmin','isActive','verified']],function(){
     Route::get('dashboard',[SuperAdminController::class,'index'])->name('super-admin.dashboard');
     Route::get('profile',[SuperAdminController::class,'profile'])->name('super-admin.profile');
     Route::get('settings',[SuperAdminController::class,'settings'])->name('super-admin.settings');
