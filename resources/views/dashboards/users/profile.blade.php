@@ -5,7 +5,7 @@
     <div class="row">
         @if ($plan_active == false)
             <div class="alert alert-warning" role="alert">
-                You currently have no active plan <a class="btn btn-primary" href="{{ route('users.settings') }}">Select
+                You currently have no active contribution plan <a class="btn btn-primary" href="{{ route('users.settings') }}">Select
                     Plan</a>
             </div>
         @endif

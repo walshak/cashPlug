@@ -4,7 +4,7 @@
     @include('layouts.errors')
     @if ($plan_active == false)
         <div class="alert alert-warning" role="alert">
-            You currently have no active plan <a class="btn btn-primary" href="{{ route('admin.settings') }}">Select
+            You currently have no active contribution plan <a class="btn btn-primary" href="{{ route('admin.settings') }}">Select
                 Plan</a>
         </div>
     @endif
@@ -26,24 +26,24 @@
                                 <div class="col-sm-6">
                                     <h3>{{ $cur_plan->name }}</h3>
                                     <p>
-                                        <i class="fas fa-check"></i> {{ $cur_plan->refs }} refrrals per cycle <br>
+                                        <i class="fas fa-check"></i> {{ $cur_plan->refs }} contributors per cycle <br>
                                         <i class="fas fa-check"></i> {{ $cur_plan->price }} NGN <br>
                                         <i class="fas fa-check"></i> {{ $cur_plan->validity }} Days <br>
                                         <i class="fas fa-check"></i> Make at least
-                                        {{ $cur_plan->price * $cur_plan->refs * env('USER_PERCENTAGE') }}k <br>
+                                        {{ $cur_plan->price * $cur_plan->refs * env('USER_PERCENTAGE') }} NGN <br>
                                         <i class="fas fa-check"></i> Min withdarwal
-                                        {{ $cur_plan->price * 2 * env('USER_PERCENTAGE') }}k <br>
+                                        {{ $cur_plan->price * 2 * env('USER_PERCENTAGE') }} NGN <br>
                                     </p>
                                 </div>
                                 <div class="col-sm-6">
                                     <h3>You have achieved</h3>
                                     <p>
-                                        <i class="fas fa-check"></i> {{ count($refs_for_cur_cycle) }} refrrals in this
+                                        <i class="fas fa-check"></i> {{ count($refs_for_cur_cycle) }} contributors in this
                                         cycle
                                         <br>
-                                        <i class="fas fa-check"></i> {{ count($all_refs) }} refrrals in total <br>
-                                        <i class="fas fa-check"></i> {{ $balance }}k is your current balance <br>
-                                        <i class="fas fa-check"></i> {{ $bal_for_cur_cycle }}k made in this cycle <br>
+                                        <i class="fas fa-check"></i> {{ count($all_refs) }} contributors in total <br>
+                                        <i class="fas fa-check"></i> {{ $balance }} NGN is your current balance <br>
+                                        <i class="fas fa-check"></i> {{ $bal_for_cur_cycle }} NGN made in this cycle <br>
                                     </p>
                                 </div>
                             </div>
@@ -125,13 +125,13 @@
                                 <div class="card-body">
                                     <h3>{{ $plan->name }}</h3>
                                     <p>
-                                        <i class="fas fa-check"></i> {{ $plan->refs }} refrals per cycle <br>
+                                        <i class="fas fa-check"></i> {{ $plan->refs }} contributors per cycle <br>
                                         <i class="fas fa-check"></i> {{ $plan->price }} NGN <br>
                                         <i class="fas fa-check"></i> {{ $plan->validity }} Days <br>
                                         <i class="fas fa-check"></i> Make at least
-                                        {{ $plan->price * $plan->refs * env('USER_PERCENTAGE') }}k <br>
+                                        {{ $plan->price * $plan->refs * env('USER_PERCENTAGE') }} NGN <br>
                                         <i class="fas fa-check"></i> Min withdarwal
-                                        {{ $plan->price * 4 * env('USER_PERCENTAGE') }}k <br>
+                                        {{ $plan->price * 4 * env('USER_PERCENTAGE') }} NGN <br>
                                     </p>
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-warning"

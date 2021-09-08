@@ -5,7 +5,7 @@
     <div class="container">
         @if ($plan_active == false)
             <div class="alert alert-warning" role="alert">
-                You currently have no active plan <a class="btn btn-primary"
+                You currently have no active contribution plan <a class="btn btn-primary"
                     href="{{ route('super-admin.settings') }}">Select
                     Plan</a>
             </div>
@@ -17,7 +17,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-8">
-                                    <h4>No of downlines</h4>
+                                    <h4>No of contributors in your cycle</h4>
                                 </div>
                                 <div class="col-4">
                                     {{ $downlines }}
@@ -33,7 +33,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-8">
-                                    <h4>Total Earnings</h4>
+                                    <h4>Total Savings</h4>
                                 </div>
                                 <div class="col-4">
                                     {{ $gross_bal }}
@@ -49,7 +49,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-8">
-                                    <h4>Withdrawn Earnings</h4>
+                                    <h4>Withdrawn Savings</h4>
                                 </div>
                                 <div class="col-4">
                                     {{ $gross_bal - $balance }}
@@ -83,7 +83,7 @@
                 <div class="card-body">
                     <h4>Member since</h4>
                     <span>{{ date('d M Y', strtotime($user->created_at)) }}</span><br><br>
-                    <label for="">Your ref link</label>
+                    <label for="">Your Invitation link</label>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control form-control-lg" id="ref_link"
                             value="{{ route('register', ['ref_id' => Auth::user()->ref_id]) }}" readonly>
