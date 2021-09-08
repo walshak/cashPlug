@@ -86,7 +86,7 @@
 
                             <div class="form-group row">
                                 <label for="refferd_by"
-                                    class="col-md-4 col-form-label text-md-right">{{ __('Reffered By') }}</label>
+                                    class="col-md-4 col-form-label text-md-right">{{ __('Reffered By (optional)') }}</label>
 
                                 <div class="col-md-6">
                                     @if (isset($_GET['ref_id']))
