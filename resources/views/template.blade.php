@@ -83,7 +83,8 @@
                         <i class="fas fa-robot fa-stack-1x fa-inverse"></i>
                     </span>
                     <h4 class="my-3">Automated</h4>
-                    <p class="text-muted">CashPlug Africa (A subsidiary of Gloftech Nig. LTD) is an automated system that works for you. It is a proven
+                    <p class="text-muted">CashPlug Africa (A subsidiary of Gloftech Nig. LTD) is an automated system
+                        that works for you. It is a proven
                         support chain system that will totally eradicate poverty using the power of Team work.
                         It is the Africans’ fastest and reliable platform to help you meet your financial goals...The
                         moment you sign up and make a contribution you will be
@@ -97,7 +98,8 @@
                         <i class="fas fa-users fa-stack-1x fa-inverse"></i>
                     </span>
                     <h4 class="my-3">Team work</h4>
-                    <p class="text-muted">Team Work boosts productivity – when workload is shared equally by members of
+                    <p class="text-muted">Team Work boosts productivity – when workload is shared equally by members
+                        of
                         a
                         team and the tasks are allocated according to the strengths and skills of each team member,
                         tasks are completed faster and more efficiently which results in a noticeable increase in
@@ -112,7 +114,8 @@
                         <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
                     </span>
                     <h4 class="my-3">Secure</h4>
-                    <p class="text-muted">CashPlug automatically matches individuals and they contribute to one another
+                    <p class="text-muted">CashPlug automatically matches individuals and they contribute to one
+                        another
                         on a fair ‘first come first serve basis’ your initial contribution is automatically matched to
                         an existing member,and from then on, new members will be assigned to you too.With a guaranteed
                         plan and secure technical
@@ -166,7 +169,7 @@
             <ul class="timeline">
                 <li>
                     <div class="timeline-image d-flex align-items-center justify-content-center">
-                        <h1 class="" style="font-size: 5rem">1</h1>
+                        <h1 class="" style=" font-size: 5rem">1</h1>
                     </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
@@ -181,14 +184,15 @@
                 </li>
                 <li class="timeline-inverted">
                     <div class="timeline-image d-flex align-items-center justify-content-center">
-                        <h1 class="" style="font-size: 5rem">2</h1>
+                        <h1 class="" style=" font-size: 5rem">2</h1>
                     </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
                             <h4 class="subheading">Activate a plan</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted"> Activate ANY Contribution plan by selecting it in the settings tab of
+                            <p class="text-muted"> Activate ANY Contribution plan by selecting it in the settings
+                                tab of
                                 your
                                 dashboard (The screen you get after logging in) and making a
                                 payment (via our payment gateways) to activate the selected Contribution plan of choice.
@@ -205,7 +209,7 @@
                 </li>
                 <li>
                     <div class="timeline-image d-flex align-items-center justify-content-center">
-                        <h1 class="" style="font-size: 5rem">3</h1>
+                        <h1 class="" style=" font-size: 5rem">3</h1>
                     </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
@@ -221,7 +225,7 @@
                 </li>
                 <li class="timeline-inverted">
                     <div class="timeline-image d-flex align-items-center justify-content-center">
-                        <h1 class="" style="font-size: 5rem">4</h1>
+                        <h1 class="" style=" font-size: 5rem">4</h1>
                     </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
@@ -229,7 +233,8 @@
                             <h4 class="subheading">Renew</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">After Your withdrawal, you will be required to invite 1 person, upon
+                            <p class="text-muted">After Your withdrawal, you will be required to invite 1 person,
+                                upon
                                 confirmation, the system
                                 will automatically allow you to renew or upgrade your contribution plan if you wish to
                                 save more.</p>
@@ -238,14 +243,15 @@
                 </li>
                 <li>
                     <div class="timeline-image d-flex align-items-center justify-content-center">
-                        <h1 class="" style="font-size: 5rem">5</h1>
+                        <h1 class="" style=" font-size: 5rem">5</h1>
                     </div>
                     <div class="timeline-panel">
                         <div class="timeline-heading">
                             <h4 class="subheading">Invitation (optional)</h4>
                         </div>
                         <div class="timeline-body">
-                            <p class="text-muted">CashPlug has an automatic system that helps members by automatically
+                            <p class="text-muted">CashPlug has an automatic system that helps members by
+                                automatically
                                 matching contributors to other contributors, but members can cut the wait by sourcing
                                 for and
                                 inviting friends and family to contribute to them.</p>
@@ -255,11 +261,13 @@
                 <li class="timeline-inverted">
                     <div class="timeline-image d-flex align-items-center justify-content-center">
                         <h4>
-                            Be Part
-                            <br />
-                            Of Our
-                            <br />
-                            Story!
+                            <a href="{{route('register')}}">
+                                Be Part
+                                <br />
+                                Of Our
+                                <br />
+                                Story!
+                            </a>
                         </h4>
                     </div>
                 </li>
@@ -275,7 +283,7 @@
                 <h3 class="section-subheading text-muted">The brains behind CashPlug.</h3>
             </div>
             <div class="row">
-                <div class="col-lg-4">
+                {{-- <div class="col-lg-4">
                     <div class="team-member">
                         <img class="mx-auto rounded-circle" src="{{ asset('landing-page/assets/img/team/1.jpg') }}"
                             alt="..." />
@@ -285,10 +293,10 @@
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-facebook-f"></i></a>
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
                     </div>
-                </div>
-                <div class="col-lg-4">
+                </div> --}}
+                <div class="col-lg-6">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="{{ asset('landing-page/assets/img/team/2.jpg') }}"
+                        <img class="mx-auto rounded-circle" src="{{ asset('landing-page/assets/img/team/sam.jpg') }}"
                             alt="..." />
                         <h4>Samuel Sambo</h4>
                         <p class="text-muted">Lead Marketer</p>
@@ -297,9 +305,9 @@
                         <a class="btn btn-dark btn-social mx-2" href="#!"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="team-member">
-                        <img class="mx-auto rounded-circle" src="{{ asset('landing-page/assets/img/team/3.jpg') }}"
+                        <img class="mx-auto rounded-circle" src="{{ asset('landing-page/assets/img/team/wal.jpg') }}"
                             alt="..." />
                         <h4>Walshak Apollos</h4>
                         <p class="text-muted">Lead Developer</p>
@@ -333,10 +341,10 @@
                     <a href="#!"><img class="img-fluid img-brand d-block mx-auto"
                             src="{{ asset('landing-page/assets/img/logos/ocean.png') }}" alt="..." /></a>
                 </div>
-                <div class="col-md-3 col-sm-6 my-3">
+                {{-- <div class="col-md-3 col-sm-6 my-3">
                     <a href="#!"><img class="img-fluid img-brand d-block mx-auto"
                             src="{{ asset('landing-page/assets/img/logos/paystack.png') }}" alt="..." /></a>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
