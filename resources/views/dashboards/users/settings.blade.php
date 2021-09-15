@@ -138,7 +138,7 @@
                                         onclick="$('#paymentForm{{ $plan->id }}').toggle()">
                                         Subscribe
                                     </button>
-                                    <script>
+                                    {{-- <script>
                                         function makePayment{{ $plan->id }}() {
                                             FlutterwaveCheckout({
                                                 public_key: "{{ env('PK_KEY') }}",
@@ -171,22 +171,19 @@
                                                 },
                                             });
                                         }
-                                    </script>
-                                    <form id="paymentForm{{ $plan->id }}" style="display: none"
+                                    </script> --}}
+                                    <form method="POST" id="paymentForm{{ $plan->id }}"
+                                        action="{{ route('super-admin.subscribe') }}" style="display: none"
                                         class="row row-cols-lg-auto">
+                                        @csrf
+                                        <input type="hidden" name="plan" value="{{ $plan->id }}">
                                         <div class="form-group">
-                                            <label for="email">Email Address</label>
-                                            <input type="email" id="email-address{{ $plan->id }}" required
-                                                value="{{ Auth::user()->email }}" class="form-control" readonly />
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="amount">Amount</label>
-                                            <input type="tel" id="amount{{ $plan->id }}" required
-                                                value="{{ $plan->price }}" class="form-control" readonly />
+                                            <label for="coupon">Coupon</label>
+                                            <input type="text" name="coupon" required class="form-control" placeholder="CP47447474"/>
                                         </div>
                                         <div class="form-submit">
-                                            <button type="button" class="btn btn-primary"
-                                                onclick="makePayment{{ $plan->id }}()"> Pay Now
+                                            <button type="submit" class="btn btn-primary">
+                                                Activate Plan
                                             </button>
                                             <button type="button" class="btn btn-warning m-3"
                                                 onclick="$('#paymentForm{{ $plan->id }}').toggle()">
