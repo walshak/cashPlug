@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\CouponController;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Middleware\isActive;
@@ -60,7 +61,7 @@ Route::get('suspended-user',function(){
     return view('suspended-user');
 })->name('suspended-user');
 
-Route::get('subscribe',[Controller::class,'subscribe'])->middleware('auth')->name('super-admin.subscribe');
+Route::post('subscribe',[Controller::class,'subscribe'])->middleware('auth')->name('super-admin.subscribe');
 
 Route::post('/users/update-profile', [UserController::class, 'update_profile'])->middleware(['auth'])->name('users.update-profile');
 Route::post('/admins/update-profile', [AdminController::class, 'update_profile'])->middleware(['auth'])->name('admins.update-profile');
@@ -76,6 +77,8 @@ Route::group(['prefix'=>'admin','middleware'=>['auth','isActive','verified']],fu
     Route::get('suspend-user/list/{user_id?}',[Controller::class,'suspend_user'])->name('admin.suspend-user');
     Route::get('approve-payment-page/{request_id?}',[Controller::class,'approve_payment_page'])->name('admin.approve-payment-page');//load the basic approve payment page
     Route::get('approve-payment/list/{request_id?}',[Controller::class,'approve_payment'])->name('admin.approve-payment');//get the data for the approve payment page
+    Route::get('coupons-page',[Controller::class,'myCoupons'])->name('admin.my-coupons-page');
+    Route::get('coupons/list',[Controller::class,'myCouponsData'])->name('admin.my-coupons');
 });
 
 Route::group(['prefix'=>'users','middleware'=>['auth','isUser','isActive','verified']],function(){
@@ -103,6 +106,10 @@ Route::group(['prefix'=>'super-admin','middleware'=>['auth','isSuperAdmin','isAc
     Route::get('demote-admin/{user_id?}',[SuperAdminController::class,'demote_admin'])->name('super-admin.demote-admin');
     Route::get('financials-page',[SuperAdminController::class,'financials_page'])->name('super-admin.financials-page');
     Route::get('financials/list',[SuperAdminController::class,'financials'])->name('super-admin.financials');
+    Route::get('coupons-page',[CouponController::class,'index'])->name('super-admin.coupons-page');
+    Route::get('coupons/list',[CouponController::class,'coupons'])->name('super-admin.coupons');
+    Route::get('coupons/create',[CouponController::class,'create'])->name('super-admin.coupons.create');
+    Route::post('coupons/create',[CouponController::class,'store'])->name('super-admin.coupons.store');
     Route::get('financials-withdrawals-page',[SuperAdminController::class,'financials_withdrawals_page'])->name('super-admin.financials-withdrawals-page');
     Route::get('financials-withdrawals/list',[SuperAdminController::class,'withdrawals'])->name('super-admin.withdrawals');
     Route::resource('plan', PlanController::class);

@@ -15,6 +15,7 @@ use App\Models\Plan;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\WithdrawalRequest;
+use App\Models\Coupon;
 use Illuminate\Support\Facades\Http;
 
 class Controller extends BaseController
@@ -141,74 +142,46 @@ class Controller extends BaseController
         //dd($refs_for_cur_cycle);
     }
 
-    public function subscribe()
+    public function subscribe(Request $request)
     {
-        $plan_id = Plan::find($_GET['plan-id'])->id;
-        $payment_refrence = intval($_GET['reference']);
-        //verify payment status
-        $response = Http::withToken(env('SK_KEY'))->get('https://api.flutterwave.com/v3/transactions/'.$payment_refrence.'/verify');
-        //dd($response);
-        if ($response->status() == 200) {
-            if (!$this->hasActivePlan()) {
-                $user = User::find(Auth::id());
-                $plan = Plan::find($plan_id);
-                $cur_date = date('Y-m-d H:i:s');
-                $ref_by = User::where('ref_id', $user->refferd_by)->get();
-                // dd($ref_by);
+        $input = $request->validate([
+            'plan' => 'required|exists:plans,id',
+            'coupon' => 'required'
+        ]);
+        $coupon = Coupon::where('coupon', $input['coupon'])->get();
 
-                //if he has subscribed before(cycle != 0),
-                //it means this subscribtion is a renewal
-                if ($user->cycle != 0) {
-                    //do subscribtion renewal
-                    $user->update([
-                        'cur_plan' => $plan->id,
-                        'plan_activated' => true,
-                        'plan_activated_on' => $cur_date,
-                        'cycle' => $user->cycle + 1
-                    ]);
+        if ($coupon->isEmpty()) {
+            return back()->with('err', 'Invalid coupon code');
+        } else {
+            // dd($coupon);
+            if ($coupon[0]->plan_id != $input['plan']) {
+                return back()->with('err', 'This coupon is not valid for this plan, please select the right plan');
+            } else {
+                $plan_id = $input['plan'];
+                if (!$this->hasActivePlan()) {
+                    $user = User::find(Auth::id());
+                    $plan = Plan::find($plan_id);
+                    $cur_date = date('Y-m-d H:i:s');
+                    $ref_by = User::where('ref_id', $user->refferd_by)->get();
+                    // dd($ref_by);
 
-                    //credit the person making the subscription renewal
-                    $credit_user = new Transaction;
-                    $credit_user->userId = Auth::id();
-                    $credit_user->amount = $plan->price * env('USER_PERCENTAGE');
-                    $credit_user->type = 'CAPITAL';
-                    $credit_user->save();
-
-                    //credit admin
-                    $credit_admin = new Transaction;
-                    $credit_admin->userId = Auth::id();
-                    $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
-                    $credit_admin->type = 'ADMIN';
-                    $credit_admin->save();
-
-                    //credit VAT
-
-                    $credit_vat = new Transaction;
-                    $credit_vat->userId = Auth::id();
-                    $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
-                    $credit_vat->type = 'VAT';
-                    $credit_vat->save();
-                } else {
-                    //do new subscription for user who has never subscribed before
-                    //call the getNextRefBeneficiary() method and set the reffered_by attribute of the user
-                    //to the value returned form the getNextRefBeneficiary() method
-                    $nextBeneciciaryOfAutoReferral = $this->getNextRefBeneficiary($plan->id) ?? env('SUPER_ADMIN_USERNAME');
-                    if ($user->refferd_by == null) {
-                        //dd($nextBeneciciaryOfAutoReferral->ref_id);
-                        $user = $user->update([
+                    //if he has subscribed before(cycle != 0),
+                    //it means this subscribtion is a renewal
+                    if ($user->cycle != 0) {
+                        //do subscribtion renewal
+                        $user->update([
                             'cur_plan' => $plan->id,
                             'plan_activated' => true,
                             'plan_activated_on' => $cur_date,
-                            'cycle' => $user->cycle + 1,
-                            'refferd_by' => $nextBeneciciaryOfAutoReferral->ref_id ?? env('SUPER_ADMIN_USERNAME')
+                            'cycle' => $user->cycle + 1
                         ]);
 
-                        //credit the person who refferd him
-                        $credit = new Transaction;
-                        $credit->userId = $nextBeneciciaryOfAutoReferral->id ?? env('SUPER_ADMIN_ID');;
-                        $credit->amount = $plan->price * env('REF_PERCENTAGE');
-                        $credit->type = 'REFERRAL-AUTO';
-                        $credit->save();
+                        //credit the person making the subscription renewal
+                        $credit_user = new Transaction;
+                        $credit_user->userId = Auth::id();
+                        $credit_user->amount = $plan->price * env('USER_PERCENTAGE');
+                        $credit_user->type = 'CAPITAL';
+                        $credit_user->save();
 
                         //credit admin
                         $credit_admin = new Transaction;
@@ -218,47 +191,201 @@ class Controller extends BaseController
                         $credit_admin->save();
 
                         //credit VAT
+
                         $credit_vat = new Transaction;
                         $credit_vat->userId = Auth::id();
                         $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
                         $credit_vat->type = 'VAT';
                         $credit_vat->save();
                     } else {
-                        $user = $user->update([
-                            'cur_plan' => $plan->id,
-                            'plan_activated' => true,
-                            'plan_activated_on' => $cur_date,
-                            'cycle' => $user->cycle + 1,
-                        ]);
-                        //credit the person who refferd him
-                        $credit = new Transaction;
-                        $credit->userId = $ref_by[0]->id ?? env('SUPER_ADMIN_ID');
-                        $credit->amount = $plan->price * env('REF_PERCENTAGE');
-                        $credit->type = 'REFERRAL';
-                        $credit->save();
+                        //do new subscription for user who has never subscribed before
+                        //call the getNextRefBeneficiary() method and set the reffered_by attribute of the user
+                        //to the value returned form the getNextRefBeneficiary() method
+                        $nextBeneciciaryOfAutoReferral = $this->getNextRefBeneficiary($plan->id) ?? env('SUPER_ADMIN_USERNAME');
+                        if ($user->refferd_by == null) {
+                            //dd($nextBeneciciaryOfAutoReferral->ref_id);
+                            $user = $user->update([
+                                'cur_plan' => $plan->id,
+                                'plan_activated' => true,
+                                'plan_activated_on' => $cur_date,
+                                'cycle' => $user->cycle + 1,
+                                'refferd_by' => $nextBeneciciaryOfAutoReferral->ref_id ?? env('SUPER_ADMIN_USERNAME')
+                            ]);
 
-                        //credit admin
-                        $credit_admin = new Transaction;
-                        $credit_admin->userId = Auth::id() ?? env('SUPER_ADMIN_ID');
-                        $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
-                        $credit_admin->type = 'ADMIN';
-                        $credit_admin->save();
+                            //credit the person who refferd him
+                            $credit = new Transaction;
+                            $credit->userId = $nextBeneciciaryOfAutoReferral->id ?? env('SUPER_ADMIN_ID');;
+                            $credit->amount = $plan->price * env('REF_PERCENTAGE');
+                            $credit->type = 'REFERRAL-AUTO';
+                            $credit->save();
 
-                        //credit VAT
-                        $credit_vat = new Transaction;
-                        $credit_vat->userId = Auth::id() ?? env('SUPER_ADMIN_ID');
-                        $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
-                        $credit_vat->type = 'VAT';
-                        $credit_vat->save();
+                            //credit admin
+                            $credit_admin = new Transaction;
+                            $credit_admin->userId = Auth::id();
+                            $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
+                            $credit_admin->type = 'ADMIN';
+                            $credit_admin->save();
+
+                            //credit VAT
+                            $credit_vat = new Transaction;
+                            $credit_vat->userId = Auth::id();
+                            $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
+                            $credit_vat->type = 'VAT';
+                            $credit_vat->save();
+                        } else {
+                            $user = $user->update([
+                                'cur_plan' => $plan->id,
+                                'plan_activated' => true,
+                                'plan_activated_on' => $cur_date,
+                                'cycle' => $user->cycle + 1,
+                            ]);
+                            //credit the person who refferd him
+                            $credit = new Transaction;
+                            $credit->userId = $ref_by[0]->id ?? env('SUPER_ADMIN_ID');
+                            $credit->amount = $plan->price * env('REF_PERCENTAGE');
+                            $credit->type = 'REFERRAL';
+                            $credit->save();
+
+                            //credit admin
+                            $credit_admin = new Transaction;
+                            $credit_admin->userId = Auth::id() ?? env('SUPER_ADMIN_ID');
+                            $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
+                            $credit_admin->type = 'ADMIN';
+                            $credit_admin->save();
+
+                            //credit VAT
+                            $credit_vat = new Transaction;
+                            $credit_vat->userId = Auth::id() ?? env('SUPER_ADMIN_ID');
+                            $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
+                            $credit_vat->type = 'VAT';
+                            $credit_vat->save();
+                        }
                     }
+                    $coupon = Coupon::where('coupon', $input['coupon']);
+                    $coupon->update(['used'=>true,'used_on'=>now('+01:00'),'user_id'=>Auth::id()]);
+                    return back()->with('msg', "Subscription added, Congratulations");
+                } else {
+                    return back()->with('err', 'You already have an active plan');
                 }
-                return back()->with('msg', "Subscription added, Congratulations");
-            } else {
-                return back()->with('err', 'You already have an active plan');
             }
-        } else {
-            return back()->with('err', "Failed to verify status of payment, please contact admin with the refrence code: " . $payment_refrence);
         }
+        //redundent flutterwave code
+        // $plan_id = Plan::find()->id;
+        // $payment_refrence = intval($_GET['reference']);
+        // //verify payment status
+        // $response = Http::withToken(env('SK_KEY'))->get('https://api.flutterwave.com/v3/transactions/' . $payment_refrence . '/verify');
+        // //dd($response);
+        // if ($response->status() == 200) {
+        //     if (!$this->hasActivePlan()) {
+        //         $user = User::find(Auth::id());
+        //         $plan = Plan::find($plan_id);
+        //         $cur_date = date('Y-m-d H:i:s');
+        //         $ref_by = User::where('ref_id', $user->refferd_by)->get();
+        //         // dd($ref_by);
+
+        //         //if he has subscribed before(cycle != 0),
+        //         //it means this subscribtion is a renewal
+        //         if ($user->cycle != 0) {
+        //             //do subscribtion renewal
+        //             $user->update([
+        //                 'cur_plan' => $plan->id,
+        //                 'plan_activated' => true,
+        //                 'plan_activated_on' => $cur_date,
+        //                 'cycle' => $user->cycle + 1
+        //             ]);
+
+        //             //credit the person making the subscription renewal
+        //             $credit_user = new Transaction;
+        //             $credit_user->userId = Auth::id();
+        //             $credit_user->amount = $plan->price * env('USER_PERCENTAGE');
+        //             $credit_user->type = 'CAPITAL';
+        //             $credit_user->save();
+
+        //             //credit admin
+        //             $credit_admin = new Transaction;
+        //             $credit_admin->userId = Auth::id();
+        //             $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
+        //             $credit_admin->type = 'ADMIN';
+        //             $credit_admin->save();
+
+        //             //credit VAT
+
+        //             $credit_vat = new Transaction;
+        //             $credit_vat->userId = Auth::id();
+        //             $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
+        //             $credit_vat->type = 'VAT';
+        //             $credit_vat->save();
+        //         } else {
+        //             //do new subscription for user who has never subscribed before
+        //             //call the getNextRefBeneficiary() method and set the reffered_by attribute of the user
+        //             //to the value returned form the getNextRefBeneficiary() method
+        //             $nextBeneciciaryOfAutoReferral = $this->getNextRefBeneficiary($plan->id) ?? env('SUPER_ADMIN_USERNAME');
+        //             if ($user->refferd_by == null) {
+        //                 //dd($nextBeneciciaryOfAutoReferral->ref_id);
+        //                 $user = $user->update([
+        //                     'cur_plan' => $plan->id,
+        //                     'plan_activated' => true,
+        //                     'plan_activated_on' => $cur_date,
+        //                     'cycle' => $user->cycle + 1,
+        //                     'refferd_by' => $nextBeneciciaryOfAutoReferral->ref_id ?? env('SUPER_ADMIN_USERNAME')
+        //                 ]);
+
+        //                 //credit the person who refferd him
+        //                 $credit = new Transaction;
+        //                 $credit->userId = $nextBeneciciaryOfAutoReferral->id ?? env('SUPER_ADMIN_ID');;
+        //                 $credit->amount = $plan->price * env('REF_PERCENTAGE');
+        //                 $credit->type = 'REFERRAL-AUTO';
+        //                 $credit->save();
+
+        //                 //credit admin
+        //                 $credit_admin = new Transaction;
+        //                 $credit_admin->userId = Auth::id();
+        //                 $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
+        //                 $credit_admin->type = 'ADMIN';
+        //                 $credit_admin->save();
+
+        //                 //credit VAT
+        //                 $credit_vat = new Transaction;
+        //                 $credit_vat->userId = Auth::id();
+        //                 $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
+        //                 $credit_vat->type = 'VAT';
+        //                 $credit_vat->save();
+        //             } else {
+        //                 $user = $user->update([
+        //                     'cur_plan' => $plan->id,
+        //                     'plan_activated' => true,
+        //                     'plan_activated_on' => $cur_date,
+        //                     'cycle' => $user->cycle + 1,
+        //                 ]);
+        //                 //credit the person who refferd him
+        //                 $credit = new Transaction;
+        //                 $credit->userId = $ref_by[0]->id ?? env('SUPER_ADMIN_ID');
+        //                 $credit->amount = $plan->price * env('REF_PERCENTAGE');
+        //                 $credit->type = 'REFERRAL';
+        //                 $credit->save();
+
+        //                 //credit admin
+        //                 $credit_admin = new Transaction;
+        //                 $credit_admin->userId = Auth::id() ?? env('SUPER_ADMIN_ID');
+        //                 $credit_admin->amount = $plan->price * env('ADMIN_PERCENTAGE');
+        //                 $credit_admin->type = 'ADMIN';
+        //                 $credit_admin->save();
+
+        //                 //credit VAT
+        //                 $credit_vat = new Transaction;
+        //                 $credit_vat->userId = Auth::id() ?? env('SUPER_ADMIN_ID');
+        //                 $credit_vat->amount = $plan->price * env('VAT_PERCENTAGE');
+        //                 $credit_vat->type = 'VAT';
+        //                 $credit_vat->save();
+        //             }
+        //         }
+        //         return back()->with('msg', "Subscription added, Congratulations");
+        //     } else {
+        //         return back()->with('err', 'You already have an active plan');
+        //     }
+        // } else {
+        //     return back()->with('err', "Failed to verify status of payment, please contact admin with the refrence code: " . $payment_refrence);
+        // }
     }
 
     public function getNextRefBeneficiary($plan_id)
@@ -398,7 +525,7 @@ class Controller extends BaseController
             $bank_code = $user->account->bank_code;
             $account = $user->account->account_number;
             // dd($bank_code);
-            $response = Http::withToken(env('SK_KEY'))->post('https://api.flutterwave.com/v3/transfers',[
+            $response = Http::withToken(env('SK_KEY'))->post('https://api.flutterwave.com/v3/transfers', [
                 'account_bank' => $bank_code,
                 'account_number' => $account,
                 'amount' => $request->amount,
@@ -441,6 +568,33 @@ class Controller extends BaseController
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function myCoupons()
+    {
+        return view('dashboards.admins.my-coupons');
+    }
+
+    public function myCouponsData(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Coupon::all();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('plan', function ($row) {
+                    //dd($row);
+                    return $row->plan->name;
+                })
+                ->addColumn('status', function ($row) {
+                    if ($row->used == false) {
+                        return "<span class='bg-success'>Unused</span>";
+                    } else {
+                        return "<span class='bg-danger'>Used</span>";
+                    }
+                })
+                ->rawColumns(['plan', 'status'])
+                ->make(true);
         }
     }
 }

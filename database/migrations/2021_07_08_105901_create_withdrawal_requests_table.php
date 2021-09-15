@@ -15,7 +15,7 @@ class CreateWithdrawalRequestsTable extends Migration
     {
         Schema::create('withdrawal_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('userId');
+            $table->unsignedBigInteger('userId');
             $table->bigInteger('amount');
             $table->boolean('approved')->default(false);
             $table->unsignedBigInteger('approved_by')->nullable();

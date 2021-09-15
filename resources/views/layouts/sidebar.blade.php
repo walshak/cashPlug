@@ -124,6 +124,13 @@
                                     <span class="hide-menu">Approve payment</span>
                                 </a>
                             </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('admin.my-coupons-page')}}"
+                                    aria-expanded="false">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    <span class="hide-menu">My Coupons</span>
+                                </a>
+                            </li>
                             <hr>
                             <span class="text-gray m-3">SUPER-ADMIN LINKS</span>
                             <li class="sidebar-item">
@@ -145,6 +152,13 @@
                                     aria-expanded="false">
                                     <i class="fas fa-user" aria-hidden="true"></i>
                                     <span class="hide-menu">Suspend admin</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{route('super-admin.coupons-page')}}"
+                                    aria-expanded="false">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    <span class="hide-menu">Coupons</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">

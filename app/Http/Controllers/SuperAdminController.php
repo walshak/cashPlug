@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 use App\Models\User;

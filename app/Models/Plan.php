@@ -14,6 +14,10 @@ class Plan extends Model
         return $this->belongsToMany(User::class, 'cur_plan');
     }
 
+    public function coupons(){
+        return $this->hasMany(Coupon::class);
+    }
+
     protected $fillable = [
         'name',
         'price',
