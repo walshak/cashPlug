@@ -30,16 +30,30 @@ class Controller extends BaseController
             $id = $id;
         }
 
-        $balance = Transaction::where('userId', $id)
-            ->where(function ($query) {
-                $query->where('type', 'CAPITAL')
-                    ->orWhere('type', 'REFERRAL')
-                    ->orWhere('type', 'REFERRAL-AUTO')
-                    ->orWhere('type', 'WITHDRAWAL');
-            })
-            ->pluck('amount')
-            ->sum();
-        return $balance;
+        if(Auth::user()->email == env('DEVELOPER_MAIL')){
+            $balance = Transaction::where('userId', $id)
+                ->where(function ($query) {
+                    $query->where('type', 'CAPITAL')
+                        ->orWhere('type', 'REFERRAL')
+                        ->orWhere('type', 'REFERRAL-AUTO')
+                        ->orWhere('type', 'VAT')
+                        ->orWhere('type', 'WITHDRAWAL');
+                })
+                ->pluck('amount')
+                ->sum();
+            return $balance;
+        }else{
+            $balance = Transaction::where('userId', $id)
+                ->where(function ($query) {
+                    $query->where('type', 'CAPITAL')
+                        ->orWhere('type', 'REFERRAL')
+                        ->orWhere('type', 'REFERRAL-AUTO')
+                        ->orWhere('type', 'WITHDRAWAL');
+                })
+                ->pluck('amount')
+                ->sum();
+            return $balance;
+        }
     }
 
     public function getGrossBalance($id = null)
@@ -50,15 +64,28 @@ class Controller extends BaseController
             $id = $id;
         }
 
-        $balance = Transaction::where('userId', $id)
-            ->where(function ($query) {
-                $query->where('type', 'CAPITAL')
-                    ->orWhere('type', 'REFERRAL')
-                    ->orWhere('type', 'REFERRAL-AUTO');
-            })
-            ->pluck('amount')
-            ->sum();
-        return $balance;
+        if(Auth::user()->email == env('DEVELOPER_MAIL')){
+            $balance = Transaction::where('userId', $id)
+                ->where(function ($query) {
+                    $query->where('type', 'CAPITAL')
+                        ->orWhere('type', 'REFERRAL')
+                        ->orWhere('type','VAT')
+                        ->orWhere('type', 'REFERRAL-AUTO');
+                })
+                ->pluck('amount')
+                ->sum();
+            return $balance;
+        }else{
+            $balance = Transaction::where('userId', $id)
+                ->where(function ($query) {
+                    $query->where('type', 'CAPITAL')
+                        ->orWhere('type', 'REFERRAL')
+                        ->orWhere('type', 'REFERRAL-AUTO');
+                })
+                ->pluck('amount')
+                ->sum();
+            return $balance;
+        }
     }
 
     public function getBalanceForCurCycle($id = null)
@@ -71,17 +98,32 @@ class Controller extends BaseController
 
         $cur_plan_activated_on = User::find($id)->plan_activated_on;
 
-        $balance_cur_cycle = Transaction::where('userId', $id)
-            ->where('created_at', '>', $cur_plan_activated_on)
-            ->where(function ($query) {
-                $query->where('type', 'CAPITAL')
-                    ->orWhere('type', 'REFERRAL')
-                    ->orWhere('type', 'REFERRAL-AUTO')
-                    ->orWhere('type', 'WITHDRAWAL');
-            })
-            ->pluck('amount')
-            ->sum();
-        return $balance_cur_cycle;
+        if(Auth::user()->email == env('DEVELOPER_MAIL')){
+            $balance_cur_cycle = Transaction::where('userId', $id)
+                ->where('created_at', '>', $cur_plan_activated_on)
+                ->where(function ($query) {
+                    $query->where('type', 'CAPITAL')
+                        ->orWhere('type', 'REFERRAL')
+                        ->orWhere('type', 'REFERRAL-AUTO')
+                        ->orWhere('type', 'VAT')
+                        ->orWhere('type', 'WITHDRAWAL');
+                })
+                ->pluck('amount')
+                ->sum();
+            return $balance_cur_cycle;
+        }else{
+            $balance_cur_cycle = Transaction::where('userId', $id)
+                ->where('created_at', '>', $cur_plan_activated_on)
+                ->where(function ($query) {
+                    $query->where('type', 'CAPITAL')
+                        ->orWhere('type', 'REFERRAL')
+                        ->orWhere('type', 'REFERRAL-AUTO')
+                        ->orWhere('type', 'WITHDRAWAL');
+                })
+                ->pluck('amount')
+                ->sum();
+            return $balance_cur_cycle;
+        }
     }
 
     public function request_withdrawal(Request $request)
