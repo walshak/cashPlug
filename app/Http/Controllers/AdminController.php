@@ -53,8 +53,8 @@ class AdminController extends Controller
     public function update_profile(Request $request){
         $input = $request->validate([
             'name' => ['required'],
-            'email' => ['required','email','unique:users'],
-            'phone' => ['required','regex:/^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/','unique:users'],
+            'email' => ['required','email'],
+            'phone' => ['required','regex:/^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/'],
         ]);
 
         $user = User::find(Auth::id());
