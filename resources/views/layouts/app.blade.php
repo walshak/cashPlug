@@ -98,7 +98,7 @@
         <!-- footer -->
         <!-- ============================================================== -->
         <footer class="footer text-center"> {{ date('Y') }} © Cashplug africa brought to you by <a
-                href="https://www.cashplug.com/">Cashplug.com</a> Powered by Gloftech Nig. LTD (RC 1483714)
+                href="https://www.cashplugafrica.com.ng/">www.cashplugafrica.com.ng</a> Powered by Gloftech Nig. LTD (RC 1483714)
         </footer>
         <!-- ============================================================== -->
         <!-- End footer -->

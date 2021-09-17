@@ -30,7 +30,7 @@ class Controller extends BaseController
             $id = $id;
         }
 
-        if(Auth::user()->email == env('DEVELOPER_MAIL')){
+        if (Auth::user()->email == env('DEVELOPER_MAIL')) {
             $balance = Transaction::where('userId', $id)
                 ->where(function ($query) {
                     $query->where('type', 'CAPITAL')
@@ -40,11 +40,11 @@ class Controller extends BaseController
                 })
                 ->pluck('amount')
                 ->sum();
-            $developer_share = Transaction::where('type','VAT')
+            $developer_share = Transaction::where('type', 'VAT')
                 ->pluck('amount')
                 ->sum();
             return $balance + $developer_share;
-        }else{
+        } else {
             $balance = Transaction::where('userId', $id)
                 ->where(function ($query) {
                     $query->where('type', 'CAPITAL')
@@ -66,7 +66,7 @@ class Controller extends BaseController
             $id = $id;
         }
 
-        if(Auth::user()->email == env('DEVELOPER_MAIL')){
+        if (Auth::user()->email == env('DEVELOPER_MAIL')) {
             $balance = Transaction::where('userId', $id)
                 ->where(function ($query) {
                     $query->where('type', 'CAPITAL')
@@ -75,11 +75,11 @@ class Controller extends BaseController
                 })
                 ->pluck('amount')
                 ->sum();
-            $developer_share = Transaction::where('type','VAT')
-            ->pluck('amount')
-            ->sum();
+            $developer_share = Transaction::where('type', 'VAT')
+                ->pluck('amount')
+                ->sum();
             return $balance + $developer_share;
-        }else{
+        } else {
             $balance = Transaction::where('userId', $id)
                 ->where(function ($query) {
                     $query->where('type', 'CAPITAL')
@@ -102,7 +102,7 @@ class Controller extends BaseController
 
         $cur_plan_activated_on = User::find($id)->plan_activated_on;
 
-        if(Auth::user()->email == env('DEVELOPER_MAIL')){
+        if (Auth::user()->email == env('DEVELOPER_MAIL')) {
             $balance_cur_cycle = Transaction::where('userId', $id)
                 ->where('created_at', '>', $cur_plan_activated_on)
                 ->where(function ($query) {
@@ -113,11 +113,11 @@ class Controller extends BaseController
                 })
                 ->pluck('amount')
                 ->sum();
-            $developer_share = Transaction::where('type','VAT')
-            ->pluck('amount')
-            ->sum();
+            $developer_share = Transaction::where('type', 'VAT')
+                ->pluck('amount')
+                ->sum();
             return $balance_cur_cycle + $developer_share;
-        }else{
+        } else {
             $balance_cur_cycle = Transaction::where('userId', $id)
                 ->where('created_at', '>', $cur_plan_activated_on)
                 ->where(function ($query) {
@@ -310,7 +310,7 @@ class Controller extends BaseController
                         }
                     }
                     $coupon = Coupon::where('coupon', $input['coupon']);
-                    $coupon->update(['used'=>true,'used_on'=>now('+01:00'),'user_id'=>Auth::id()]);
+                    $coupon->update(['used' => true, 'used_on' => now('+01:00'), 'user_id' => Auth::id()]);
                     return back()->with('msg', "Subscription added, Congratulations");
                 } else {
                     return back()->with('err', 'You already have an active plan');
@@ -573,17 +573,23 @@ class Controller extends BaseController
             $bank_code = $user->account->bank_code;
             $account = $user->account->account_number;
             // dd($bank_code);
-            $response = Http::withToken(env('SK_KEY'))->post('https://api.flutterwave.com/v3/transfers', [
-                'account_bank' => $bank_code,
-                'account_number' => $account,
-                'amount' => $request->amount,
-                'currency' => 'NGN',
-                'beneficiary_name' => $user->name
+            // $response = Http::withToken(env('SK_KEY'))->post('https://api.flutterwave.com/v3/transfers', [
+            //     'account_bank' => $bank_code,
+            //     'account_number' => $account,
+            //     'amount' => $request->amount,
+            //     'currency' => 'NGN',
+            //     'beneficiary_name' => $user->name
 
-            ]);
-            dd($response->body());
+            // ]);
             //process payment
-            return back()->with('msg', 'Withrawal request of user: ' . $user->name . ' approved');
+            if ($request->update([
+                'approved' => true,
+                'approved_by' => Auth::id(),
+                'approved_on' => now('+01:00')
+
+            ])) {
+                return back()->with('msg', 'Withrawal request of user: ' . $user->name . ' approved');
+            }
         }
     }
     public function approve_payment(Request $request, $request_id = null)
@@ -601,10 +607,18 @@ class Controller extends BaseController
                     onclick="return confirm(\'' . $confirm_msg . '\')">Approve</a>';
                     return $actionBtn;
                 })
-                ->addColumn('name', function ($row) {
-                    return $row->user->name;
+                // ->addColumn('name', function ($row) {
+                //     return $row->user->name;
+                // })
+                ->addColumn('account_details', function ($row) {
+                    $user = User::find($row->userId);
+                    $account_name = $user->account->account_name;
+                    $account_number = $user->account->account_number;
+                    $bank = $user->account->bank;
+
+                    return $account_number . "<br>" . $account_name . "<br>" . $bank;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','account_details'])
                 ->make(true);
         }
     }

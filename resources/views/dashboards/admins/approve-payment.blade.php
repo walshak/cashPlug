@@ -13,7 +13,7 @@
                 <table class="table yajra-datatable">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Account Data</th>
                             <th>Amount</th>
                             <th>Date</th>
                             <th>Action</th>
@@ -35,7 +35,7 @@
               serverSide: true,
               ajax: "{{ route('admin.approve-payment') }}",
               columns: [
-                  {data: 'name', name: 'name'},
+                  {data: 'account_details', name: 'account_details'},
                   {data: 'amount', name: 'amount'},
                   {data: 'created_at', name: 'created_at'},
                   {
