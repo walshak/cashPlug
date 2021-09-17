@@ -36,12 +36,14 @@ class Controller extends BaseController
                     $query->where('type', 'CAPITAL')
                         ->orWhere('type', 'REFERRAL')
                         ->orWhere('type', 'REFERRAL-AUTO')
-                        ->orWhere('type', 'VAT')
                         ->orWhere('type', 'WITHDRAWAL');
                 })
                 ->pluck('amount')
                 ->sum();
-            return $balance;
+            $developer_share = Transaction::where('type','VAT')
+                ->pluck('amount')
+                ->sum();
+            return $balance + $developer_share;
         }else{
             $balance = Transaction::where('userId', $id)
                 ->where(function ($query) {
@@ -69,12 +71,14 @@ class Controller extends BaseController
                 ->where(function ($query) {
                     $query->where('type', 'CAPITAL')
                         ->orWhere('type', 'REFERRAL')
-                        ->orWhere('type','VAT')
                         ->orWhere('type', 'REFERRAL-AUTO');
                 })
                 ->pluck('amount')
                 ->sum();
-            return $balance;
+            $developer_share = Transaction::where('type','VAT')
+            ->pluck('amount')
+            ->sum();
+            return $balance + $developer_share;
         }else{
             $balance = Transaction::where('userId', $id)
                 ->where(function ($query) {
@@ -105,12 +109,14 @@ class Controller extends BaseController
                     $query->where('type', 'CAPITAL')
                         ->orWhere('type', 'REFERRAL')
                         ->orWhere('type', 'REFERRAL-AUTO')
-                        ->orWhere('type', 'VAT')
                         ->orWhere('type', 'WITHDRAWAL');
                 })
                 ->pluck('amount')
                 ->sum();
-            return $balance_cur_cycle;
+            $developer_share = Transaction::where('type','VAT')
+            ->pluck('amount')
+            ->sum();
+            return $balance_cur_cycle + $developer_share;
         }else{
             $balance_cur_cycle = Transaction::where('userId', $id)
                 ->where('created_at', '>', $cur_plan_activated_on)
