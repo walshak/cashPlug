@@ -29,10 +29,15 @@ class CouponController extends Controller
                 ->addIndexColumn()
                 ->addColumn('vendor', function ($row) {
                     //dd($row);
-                    return $row->vendor->name;
+                    return User::find($row->vendor)->name;
                 })
                 ->addColumn('user',function($row){
-                    return $row->used_by->name;
+                    if(!is_null($row->used_by)){
+                        User::find($row->used_by)->name;
+                    }else{
+                        return "N/A";
+                    }
+                    return User::find()->name;
                 })
                 ->rawColumns(['vendor','user'])
                 ->make(true);
