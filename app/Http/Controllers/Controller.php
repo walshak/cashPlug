@@ -494,7 +494,7 @@ class Controller extends BaseController
                 $cycle = $chkPlan->cycle;
                 if ($referals < ($referalsPerCycle * $cycle) && !$this->hasRequestedWithdrawal) {
                     return true;
-                } elseif ($referals == ($referalsPerCycle * $cycle)) {
+                } elseif ($referals == ($referalsPerCycle * $cycle) && $this->hasRequestedWithdrawal) {
                     $chkPlan->update([
                         'plan_activated' => false
                     ]);
