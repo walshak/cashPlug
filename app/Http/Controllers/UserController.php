@@ -18,6 +18,7 @@ class UserController extends Controller
             'balance' => parent::getBalance(),
             'downlines' => count(parent::getRefs()),
             'gross_bal' => parent::getGrossBalance(),
+            'pending_withdrawal' => parent::hasRequestedWithdrawal(),
             'user' => User::find(Auth::id())
         ]);
     }

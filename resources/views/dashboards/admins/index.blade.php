@@ -110,6 +110,26 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-3 m-1">
+                <div class="row">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-8">
+                                    <h4>Pending Withdrawal request</h4>
+                                </div>
+                                <div class="col-4">
+                                    @if ($pending_withdrawal == true)
+                                        1
+                                    @else
+                                        0
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
