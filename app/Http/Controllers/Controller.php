@@ -492,9 +492,9 @@ class Controller extends BaseController
                 ])->get();
                 $referals = count($referals);
                 $cycle = $chkPlan->cycle;
-                if ($referals < ($referalsPerCycle * $cycle) && !$this->hasRequestedWithdrawal) {
+                if ($referals < ($referalsPerCycle * $cycle) && !$this->hasRequestedWithdrawal()) {
                     return true;
-                } elseif ($referals == ($referalsPerCycle * $cycle) && $this->hasRequestedWithdrawal) {
+                } elseif ($referals == ($referalsPerCycle * $cycle) && $this->hasRequestedWithdrawal()) {
                     $chkPlan->update([
                         'plan_activated' => false
                     ]);
