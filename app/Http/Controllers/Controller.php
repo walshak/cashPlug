@@ -485,14 +485,14 @@ class Controller extends BaseController
         if ($planActivated == true) {
             $planValidity = $chkPlan->plan->validity;
             $referalsPerCycle = $chkPlan->plan->refs;
-            if (($cur_date - strtotime($planActivatedOn)) / 86400 <= $planValidity) {
+            if (($cur_date - strtotime($planActivatedOn)) / 86400 <= $planValidity || !$this->hasRequestedWithdrawal()) {
                 $referals = User::where([
                     'refferd_by' => $chkPlan->ref_id,
                     'plan_activated' => true
                 ])->get();
                 $referals = count($referals);
                 $cycle = $chkPlan->cycle;
-                if ($referals < ($referalsPerCycle * $cycle) && !$this->hasRequestedWithdrawal()) {
+                if ($referals < ($referalsPerCycle * $cycle) || !$this->hasRequestedWithdrawal()) {
                     return true;
                 } elseif ($referals == ($referalsPerCycle * $cycle) && $this->hasRequestedWithdrawal()) {
                     $chkPlan->update([
