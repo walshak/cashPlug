@@ -492,7 +492,7 @@ class Controller extends BaseController
                 ])->get();
                 $referals = count($referals);
                 $cycle = $chkPlan->cycle;
-                if ($referals < ($referalsPerCycle * $cycle)) {
+                if ($referals < ($referalsPerCycle * $cycle) && !$this->hasRequestedWithdrawal) {
                     return true;
                 } elseif ($referals == ($referalsPerCycle * $cycle)) {
                     $chkPlan->update([
@@ -626,7 +626,10 @@ class Controller extends BaseController
     public function hasRequestedWithdrawal()
     {
         $user = Auth::user();
-        if (count($user->withdrawalRequest) > 0) {
+        $withdrawal_reqs = WithdrawalRequest::where('userId',$user->id)
+                                            ->where('approved',false)
+                                            ->count();
+        if ($withdrawal_reqs > 0) {
             return true;
         } else {
             return false;
